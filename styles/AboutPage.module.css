@@ -1,0 +1,108 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.container > * {
+  flex: 1;
+}
+
+.container > div:first-child {
+  border-right: 1px solid var(--accent-color);
+}
+
+.container h1 {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+.bgwhite {
+  background-color: white;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
+
+
+.heading {
+  margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    display: block;
+  }
+  .container > div:first-child {
+    border-right: none;
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .flex {
+    display: block;
+  }
+  .form input {
+    font-size: 0.85rem;
+  }
+}
+
+.code {
+  counter-reset: line;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.line::before {
+  content: counter(line);
+  counter-increment: line;
+  margin-right: 1rem;
+  color: grey;
+}
+
+.code a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.code a:hover {
+  text-decoration: underline;
+}
+
+.className {
+  color: var(--accent-color);
+}
+
+@media screen and (max-width: 600px) {
+  .code {
+    font-size: 0.85rem;
+    line-height: 1.5rem;
+  }
+}
+
+.textblack {
+  color: black;
+}
+
+.wrapper {
+  padding: 20px;
+  color: black;
+  font-size: 1.7rem;
+  line-height: 2.2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.wrapper h2 {
+  margin-bottom: 0.5rem;
+}
+
