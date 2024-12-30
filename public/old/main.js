@@ -38,7 +38,7 @@ renderer.render(scene, camera);
 
 const loader = new GLTFLoader();
 
-loader.load( './model/cafe/scene.gltf', function ( gltf ) {
+loader.load( '/old/model/cafe/scene.gltf', function ( gltf ) {
 gltf.scene.position.x = 1
     gltf.scene.position.z = 0.95
     scene.add( gltf.scene );
@@ -54,7 +54,7 @@ gltf.scene.position.x = 1
 var mixer;
 function _LoadAnimatedModel() {
     const loader = new FBXLoader();
-    loader.setPath('model/');
+    loader.setPath('old/model/');
     loader.load('malcolm.fbx', (fbx) => {
         fbx.scale.setScalar(0.0045);
         fbx.traverse(c => {
@@ -62,7 +62,7 @@ function _LoadAnimatedModel() {
         });
 
         const anim = new FBXLoader();
-        anim.setPath('model/');
+        anim.setPath('old/model/');
         anim.load('dance.fbx', (anim) => {
             const m = new THREE.AnimationMixer(fbx);
             mixer = m;
@@ -83,7 +83,7 @@ _LoadAnimatedModel();
 
 
 const citygeo = new THREE.PlaneGeometry( 7, 7, 62 );
-const cityTexture = new THREE.TextureLoader().load('model/bgim.jpg')
+const cityTexture = new THREE.TextureLoader().load('old/model/bgim.jpg')
 const materialcity = new THREE.MeshStandardMaterial( {map: cityTexture, side: THREE.DoubleSide} );
 const city = new THREE.Mesh( citygeo, materialcity );
 scene.add(city);
