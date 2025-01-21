@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flappy Bird NN</title>
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #87CEEB;
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #000;
+            background: white;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="controls">
+        <button id="homeButton">STOP</button>
+        <button id="ffToggle">Fast Forward</button>
+        <!-- <button id="soundToggle">Sound</button> -->
+    </div>
+
+    <script language="javascript" type="text/javascript" src="/nn-bird/NEAT_browser.js"></script>
+    <script>
+      // First, define the NEAT configuration
+      const neatConfig = {
+          model: [
+              {nodeCount: 3, type: "input"},
+              {nodeCount: 8, type: "hidden", activationfunc: activation.TANH},
+              {nodeCount: 1, type: "output", activationfunc: activation.SIGMOID}
+          ],
+          populationSize: 50,
+          mutationRate: 0.1,
+          mutationMethod: mutate.ADJUST,
+          crossoverMethod: crossover.AVERAGE
+      };
+
+      // Initialize NEAT
+      const neat = new NEAT(neatConfig);
+
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      const WIDTH = 800;
+      const HEIGHT = 600;
+      const PIPE_WIDTH = 70;
+      const PIPE_SPEED = 4;
+      const GRAVITY = 0.8;
+      const JUMP_FORCE = -11;
+      const GAP_SIZE = 200;
+
+      class Bird {
+          constructor() {
+              this.width = 40;
+              this.height = 40;
+              this.x = WIDTH / 4;
+              this.y = HEIGHT / 2;
+              this.velocity = 0;
+              this.hit = false;
+          }
+
+          update() {
+              this.velocity += GRAVITY;
+              this.y += this.velocity;
+
+              if (this.y + this.height >= HEIGHT) {
+                  this.y = HEIGHT - this.height;
+                  this.velocity = 0;
+                  // this.hit = true;
+              }
+              if (this.y <= 0) {
+                  this.y = 0;
+                  this.velocity = 0;
+                  // this.hit = true;
+              }
+          }
+
+          jump() {
+              // if (this.velocity > -5) {
+                  this.velocity = JUMP_FORCE;
+              // }
+          }
+
+          draw() {
+            if (this.hit) 
+            return;
+              ctx.fillStyle = this.hit ? 'red' : 'yellow';
+              ctx.fillRect(this.x, this.y, this.width, this.height);
+          }
+      }
+
+      class Pipe {
+          constructor(x, top, height, isBlue = false) {
+              this.x = x;
+              this.top = top;
+              this.height = height;
+              this.width = PIPE_WIDTH;
+              this.isBlue = isBlue;
+              this.direction = Math.random() > 0.5 ? 1 : -1;
+              this.ySpeed = 2;
+          }
+
+          update() {
+              this.x -= PIPE_SPEED;
+              
+              if (this.isBlue) {
+                  if (this.top === 0) {
+                      if (this.direction === 1) {
+                          if (this.height <= this.ySpeed * 3) {
+                              this.direction = -1;
+                          }
+                          this.height -= this.ySpeed;
+                      } else {
+                          if (HEIGHT - (this.top + this.height) < GAP_SIZE + this.ySpeed * 3) {
+                              this.direction = 1;
+                          }
+                          this.height += this.ySpeed;
+                      }
+                  } else {
+                      if (this.direction === 1) {
+                          if (this.top < GAP_SIZE + this.ySpeed * 3) {
+                              this.direction = -1;
+                          }
+                          this.top -= this.ySpeed;
+                          this.height += this.ySpeed;
+                      } else {
+                          if (this.height <= this.ySpeed * 3) {
+                              this.direction = 1;
+                          }
+                          this.top += this.ySpeed;
+                          this.height -= this.ySpeed;
+                      }
+                  }
+              }
+          }
+
+          draw() {
+              ctx.fillStyle = this.isBlue ? 'blue' : 'green';
+              ctx.fillRect(this.x, this.top, this.width, this.height);
+          }
+      }
+
+      let birds = [];
+      let pipes = [];
+      let frameCount = 0;
+      let isActive = true;
+      let gameSpeed = 60;
+
+      function initGame() {
+          birds = [];
+          pipes = [];
+
+          // In initGame(), reset fitness for all creatures:
+          neat.creatures.forEach(c => c.score = 0);
+          
+          // Create a bird for each creature in the population
+          for (let i = 0; i < neat.populationSize; i++) {
+              birds.push(new Bird());
+          }
+      }
+
+      function createPipes() {
+          // const isBlue = Math.random() < 0.25;
+          const isBlue = false;
+          const spaceHeight = isBlue ? 
+              Math.random() * 65 + 175 : // 175-240 for blue pipes
+              Math.random() * 80 + 150;  // 150-230 for green pipes
+          
+          const spaceTop = Math.random() * (HEIGHT - spaceHeight - 100) + 50;
+          const spaceBottom = spaceTop + spaceHeight;
+          
+          pipes.push(
+              new Pipe(WIDTH, 0, spaceTop, isBlue),
+              new Pipe(WIDTH, spaceBottom, HEIGHT - spaceBottom, isBlue)
+          );
+      }
+
+      function checkCollision(bird, pipe) {
+          return bird.x < pipe.x + pipe.width &&
+                 bird.x + bird.width > pipe.x &&
+                 bird.y < pipe.top + pipe.height &&
+                 bird.y + bird.height > pipe.top;
+      }
+
+      function update() {
+          if (!isActive) return;
+
+          frameCount++;
+          if (frameCount % 120 === 0) {
+              createPipes();
+          }
+
+          // Update birds
+          let aliveBirds = 0;
+          for (let i = 0; i < birds.length; i++) {
+              const bird = birds[i];
+              if (bird.hit) continue;
+              
+              bird.update();
+              aliveBirds++;
+
+              // Get closest pipe
+              const closestPipe = pipes.find(p => p.x + p.width > bird.x);
+              if (closestPipe) {
+                  // Replace the input calculation with:
+                  const gapCenter = closestPipe.top === 0 
+                      ? closestPipe.height + (GAP_SIZE / 2)  // Top pipe is upper part of gap
+                      : closestPipe.top - (GAP_SIZE / 2);    // Bottom pipe's top is gap end
+
+                  // Neural network inputs
+                  const inputs = [
+                      bird.y / HEIGHT,
+                      (bird.y - gapCenter) / HEIGHT,  // Signed distance to gap center
+                      closestPipe.x / WIDTH
+                  ];
+
+                 // Each frame, do:
+                  if (!bird.hit) {
+                      neat.creatures[i].score += 0.1;
+                  }
+
+                  // Then, once the bird hits a pipe or the floor:
+                  if (bird.hit) {
+                      neat.setFitness(neat.creatures[i].score, i);
+                  }
+
+                  // Set inputs for the creature
+                  neat.setInputs(inputs, i);
+                  
+                  // Feed forward
+                  neat.creatures[i].feedForward();
+                  
+                  // Get decision and jump if output is high enough
+                  if (neat.creatures[i].network.layers[2].nodes[0].value > 0.5) {
+                      bird.jump();
+                  }
+
+              }
+              
+
+              // Check collisions
+              for (const pipe of pipes) {
+                  if (checkCollision(bird, pipe)) {
+                      bird.hit = true;
+                      break;
+                  }
+              }
+          }
+
+          // Update pipes
+          for (let i = pipes.length - 1; i >= 0; i--) {
+              pipes[i].update();
+              if (pipes[i].x + pipes[i].width < 0) {
+                  pipes.splice(i, 1);
+                  // Reward surviving birds
+                  for (let j = 0; j < birds.length; j++) {
+                      if (!birds[j].hit) {
+                          neat.setFitness(neat.creatures[j].score + 50, j);
+                      }
+                  }
+              }
+          }
+
+          // If all birds are dead, evolve and reset
+          if (aliveBirds === 0) {
+              neat.doGen();
+              initGame();
+          }
+      }
+
+      function draw() {
+          ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+          // Draw pipes
+          pipes.forEach(pipe => pipe.draw());
+
+          // Draw birds
+          birds.forEach(bird => bird.draw());
+
+          // Draw UI
+          ctx.fillStyle = 'black';
+          ctx.font = '20px Arial';
+          ctx.fillText(`Birds Alive: ${birds.filter(b => !b.hit).length}`, 10, 30);
+          ctx.fillText(`Generation: ${neat.generation}`, 10, 60);
+      }
+
+      function gameLoop() {
+          update();
+          draw();
+          setTimeout(() => requestAnimationFrame(gameLoop), 1000 / gameSpeed);
+      }
+
+      // Event Listeners
+      document.getElementById('ffToggle').addEventListener('click', () => {
+          gameSpeed = gameSpeed === 60 ? 180 : 60;
+          document.getElementById('ffToggle').innerText = gameSpeed === 60 ? 'Fast Forward' : 'Normal Speed';
+      });
+
+      // document.getElementById('soundToggle').addEventListener('click', () => {
+      //     // Toggle sound logic here
+      // });
+
+      document.getElementById('homeButton').addEventListener('click', () => {
+          isActive = !isActive;
+          document.getElementById('homeButton').innerText = isActive ? 'STOP' : 'START';
+      });
+
+      // Start the game
+      initGame();
+      gameLoop();
+  </script>
+</body>
+</html>

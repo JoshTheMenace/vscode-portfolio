@@ -44,10 +44,10 @@
   background: rgba(82, 143, 240, 0.25);
 }
 
-.material-ui {
-  border: 0.1rem solid rgb(25, 118, 210);
+.Neural-Networks {
+  border: 0.1rem solid rgb(225, 118, 110);
 }
-.material-ui:hover {
+.Neural-Networks:hover {
   background: rgba(25, 118, 210, 0.25);
 }
 
@@ -79,9 +79,9 @@
   background: rgba(255, 65, 84, 0.25);
 }
 
-.css-modules {
+.Machine-Learning {
   border: 2px solid rgb(21, 114, 182);
 }
-.css-modules:hover {
+.ML:hover {
   background: rgba(21, 114, 182, 0.25);
 }

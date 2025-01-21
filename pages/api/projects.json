@@ -35,5 +35,13 @@
     "tags": ["firebase"],
     "web_code": "https://github.com/itsnitinr/vscode-portfolio",
     "demo": "https://pictureit.games/"
+  },
+  {
+    "id": 5,
+    "name": "Neural Network Bird",
+    "image": "https://imgur.com/97Mv3uK.png",
+    "description": "A neural network that learns to fly a bird through incoming pipes.",
+    "tags": ["Machine-Learning", "Neural-Networks"],
+    "demo": "/nn-bird"
   }
 ]
