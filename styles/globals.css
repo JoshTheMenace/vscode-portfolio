@@ -48,7 +48,7 @@
   border: 0.1rem solid rgb(225, 118, 110);
 }
 .Neural-Networks:hover {
-  background: rgba(25, 118, 210, 0.25);
+  background: rgba(225, 118, 110, 0.25);
 }
 
 .threejs {
@@ -82,6 +82,62 @@
 .Machine-Learning {
   border: 2px solid rgb(21, 114, 182);
 }
-.ML:hover {
+.Machine-Learning:hover {
   background: rgba(21, 114, 182, 0.25);
+}
+
+.typescript {
+  border: 2px solid rgb(49, 120, 198);
+}
+.typescript:hover {
+  background: rgba(49, 120, 198, 0.25);
+}
+
+.claude-ai {
+  border: 2px solid rgb(204, 123, 67);
+}
+.claude-ai:hover {
+  background: rgba(204, 123, 67, 0.25);
+}
+
+.cerebras {
+  border: 2px solid rgb(138, 43, 226);
+}
+.cerebras:hover {
+  background: rgba(138, 43, 226, 0.25);
+}
+
+.mastra {
+  border: 2px solid rgb(20, 184, 166);
+}
+.mastra:hover {
+  background: rgba(20, 184, 166, 0.25);
+}
+
+.gemini {
+  border: 2px solid rgb(66, 133, 244);
+}
+.gemini:hover {
+  background: rgba(66, 133, 244, 0.25);
+}
+
+.adb {
+  border: 2px solid rgb(60, 186, 84);
+}
+.adb:hover {
+  background: rgba(60, 186, 84, 0.25);
+}
+
+.ai {
+  border: 2px solid rgb(168, 85, 247);
+}
+.ai:hover {
+  background: rgba(168, 85, 247, 0.25);
+}
+
+.mobile {
+  border: 2px solid rgb(59, 130, 246);
+}
+.mobile:hover {
+  background: rgba(59, 130, 246, 0.25);
 }

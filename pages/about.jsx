@@ -85,8 +85,7 @@ const AboutPage = () => {
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>h2</span>&gt;Work Experience&lt;/<span className={styles.className}>h2</span>&gt;</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
               <p className={styles.line}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I'm currently a contractor at Stryker, focusing on building
-                scalable systems and delivering impactful features in the medical field.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I'm currently a contractor at Stryker, where I specialize in the voice command and NLP module for a team-developed surgical application, enabling hands-free medical equipment control and enhancing surgeon efficiency in the OR.
               </p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
@@ -99,7 +98,7 @@ const AboutPage = () => {
           <p className={styles.line}></p>
 
           <p className={styles.line}>&nbsp;&nbsp;&lt;<span className={styles.className}>section</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>h2</span>&gt;Acheivements&lt;/<span className={styles.className}>h2</span>&gt;</p>
+            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>h2</span>&gt;Achievements&lt;/<span className={styles.className}>h2</span>&gt;</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
               <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.96 GPA | B.S. Computer Science - Utah Valley University</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
@@ -107,7 +106,10 @@ const AboutPage = () => {
               <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mobile Dev Certification - MTECH</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JustBuild Hackathon 2024 - 2nd Place</p>
+              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JustBuild AI Agents Hackathon - 2nd Place</p>
+            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
+            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
+              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Weber State Hackathon - 2nd Place</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
             <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
               <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chosen as Time magazine's Person of the Year 2006</p>
@@ -145,7 +147,7 @@ const AboutPage = () => {
           <section>
             <h2>Work</h2>
             <p>
-              I'm currently a contractor at Stryker, focusing on building scalable systems and delivering impactful features in the medical field.
+              I'm currently a contractor at Stryker, where I specialize in the voice command and NLP module for a team-developed surgical application, enabling hands-free medical equipment control and enhancing surgeon efficiency in the OR.
             </p>
             <p>
               I have worked for several other companies, building systems such as multiplayer games, mobile applications, and backend systems.
@@ -155,7 +157,7 @@ const AboutPage = () => {
           <br></br>
 
           <section>
-            <h2>Acheivements</h2>
+            <h2>Achievements</h2>
             <p>
               3.96 GPA | B.S. Computer Science - Utah Valley University
             </p>
@@ -163,7 +165,10 @@ const AboutPage = () => {
               Mobile Dev Certification - MTECH
             </p>
             <p>
-              JustBuild Hackathon 2024 - 2nd Place
+              JustBuild AI Agents Hackathon - 2nd Place
+            </p>
+            <p>
+              Weber State Hackathon - 2nd Place
             </p>
             <p>
               Chosen as Time magazine's Person of the Year 2006
