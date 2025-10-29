@@ -7,10 +7,19 @@
     "tags": ["next", "flutter", "tailwind", "firebase", "stripe"],
     "source_code": "",
     "demo": "https://shop.wholi.co/",
-    "appStore": "https://apps.apple.com/us/app/wholi-co/id6736493577"
+    "appStore": "https://play.google.com/store/apps/details?id=co.wholi&hl=en_US"
   },
   {
     "id": 2,
+    "name": "JARVIS",
+    "image": "https://img.youtube.com/vi/sJgnRn_ejG4/maxresdefault.jpg",
+    "description": "AI-powered voice assistant with Tony Stark-inspired AR interface. Features wake word detection, real-time audio visualization, and hands-free interaction. Built for Mission to Mars hackathon.",
+    "tags": ["flutter", "dart", "gemini", "ai", "picovoice"],
+    "web_code": "https://github.com/JoshTheMenace/jarvis",
+    "demo": "https://www.youtube.com/shorts/sJgnRn_ejG4"
+  },
+  {
+    "id": 3,
     "name": "Learnable",
     "image": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/837/204/datas/gallery.jpg",
     "description": "AI-powered educational platform with personalized lessons, interactive code execution, and real-time chat. Won 2nd place at Weber State Hackathon.",
@@ -19,7 +28,7 @@
     "demo": "https://www.youtube.com/watch?v=wGg4vOetBNg"
   },
   {
-    "id": 3,
+    "id": 4,
     "name": "PhoneAgent",
     "image": "https://img.youtube.com/vi/otLwivWkeIg/maxresdefault.jpg",
     "description": "Autonomous Android device controller using multimodal AI agents. Converts natural language to device operations. Won 2nd place at JustBuild AI Agents Hackathon.",
@@ -28,14 +37,14 @@
     "demo": "https://www.youtube.com/watch?v=otLwivWkeIg"
   },
   {
-    "id": 4,
+    "id": 5,
     "name": "Linguava - In Progress",
     "image": "https://imgur.com/n8D3KnQ.png",
     "description": "AI-first language learning application with personalized lessons and interactive practice.",
     "tags": ["flutter", "ai", "mobile"]
   },
   {
-    "id": 5,
+    "id": 6,
     "name": "Neural Network Bird",
     "image": "https://imgur.com/97Mv3uK.png",
     "description": "A neural network that learns to fly a bird through incoming pipes using genetic algorithms and backpropagation.",
@@ -43,7 +52,7 @@
     "demo": "/nn-bird"
   },
   {
-    "id": 6,
+    "id": 7,
     "name": "Old Portfolio Website",
     "image": "https://imgur.com/zkkBQqi.png",
     "description": "My previous portfolio website using three.js for 3D graphics and animations.",

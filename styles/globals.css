@@ -141,3 +141,17 @@
 .mobile:hover {
   background: rgba(59, 130, 246, 0.25);
 }
+
+.dart {
+  border: 2px solid rgb(0, 180, 240);
+}
+.dart:hover {
+  background: rgba(0, 180, 240, 0.25);
+}
+
+.picovoice {
+  border: 2px solid rgb(147, 51, 234);
+}
+.picovoice:hover {
+  background: rgba(147, 51, 234, 0.25);
+}
