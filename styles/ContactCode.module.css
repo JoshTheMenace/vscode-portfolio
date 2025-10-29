@@ -24,9 +24,31 @@
   color: var(--accent-color);
 }
 
+@media screen and (max-width: 900px) {
+  .code {
+    font-size: 1.05rem;
+    line-height: 1.75rem;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .code {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     line-height: 1.5rem;
+  }
+
+  .line::before {
+    margin-right: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .code {
+    font-size: 0.85rem;
+    line-height: 1.4rem;
+  }
+
+  .line::before {
+    margin-right: 0.5rem;
   }
 }

@@ -3,4 +3,31 @@
   align-items: center;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   margin: 1rem 0;
+  gap: 1rem;
+}
+
+/* Tablet */
+@media screen and (max-width: 900px) {
+  .container {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.875rem;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+  .container {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin: 0.875rem 0;
+  }
+}
+
+/* Extra small phones */
+@media screen and (max-width: 400px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
 }

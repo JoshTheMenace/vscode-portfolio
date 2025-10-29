@@ -54,11 +54,33 @@
 
 @media screen and (max-width: 600px) {
   .sidebar {
-    width: 10vw;
+    width: 12vw;
+    min-width: 48px;
+  }
+  .iconContainer {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .icon {
-    height: 40px;
-    width: 40px;
-    padding: 0.6rem;
+    height: 36px;
+    width: 36px;
+    padding: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .sidebar {
+    width: 14vw;
+    min-width: 52px;
+  }
+  .iconContainer {
+    min-height: 52px;
+  }
+  .icon {
+    height: 32px;
+    width: 32px;
+    padding: 0.45rem;
   }
 }

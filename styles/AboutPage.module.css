@@ -49,7 +49,22 @@
   }
 }
 
+@media screen and (max-width: 900px) {
+  .container h1 {
+    font-size: 1.35rem;
+  }
+}
+
 @media screen and (max-width: 600px) {
+  .container {
+    gap: 1.5rem;
+  }
+
+  .container h1 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
   .flex {
     display: block;
   }
@@ -104,5 +119,56 @@
 }
 .wrapper h2 {
   margin-bottom: 0.5rem;
+}
+
+/* Tablet adjustments for wrapper */
+@media screen and (max-width: 900px) {
+  .wrapper {
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    padding: 18px;
+  }
+  .wrapper h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile adjustments for wrapper */
+@media screen and (max-width: 600px) {
+  .wrapper {
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    padding: 16px;
+  }
+
+  .wrapper h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .wrapper p {
+    margin-bottom: 1rem;
+  }
+
+  .wrapper ul {
+    padding-left: 1.25rem;
+  }
+
+  .wrapper li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Extra small phones adjustments for wrapper */
+@media screen and (max-width: 400px) {
+  .wrapper {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 14px;
+  }
+
+  .wrapper h2 {
+    font-size: 1.2rem;
+  }
 }
 

@@ -192,28 +192,66 @@
 
 /* Phone */
 @media screen and (max-width: 600px) {
+  .container {
+    height: auto;
+    min-height: 60vh;
+  }
   .foreground {
-    margin: 0;
+    margin: 1rem 0;
+    position: relative;
+    z-index: 10;
   }
   .name {
     font-size: 2rem;
+    margin-bottom: 1rem;
   }
   .bio {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     margin-bottom: 2rem;
   }
   .button {
     font-size: 1rem;
+    padding: 0.75rem 1.25rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    display: inline-block;
   }
   .outlined {
     font-size: 1rem;
+    padding: 0.75rem 1.25rem;
+    display: inline-block;
   }
   .illustration {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 75vw;
-    height: 50vh;
-    z-index: 1;
+    bottom: -20px;
+    right: -20px;
+    width: 70vw;
+    height: 45vh;
+    z-index: 0;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+}
+
+/* Extra small phones */
+@media screen and (max-width: 400px) {
+  .name {
+    font-size: 1.75rem;
+  }
+  .bio {
+    font-size: 1rem;
+  }
+  .button,
+  .outlined {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.75rem;
+  }
+  .illustration {
+    width: 80vw;
+    height: 40vh;
+    opacity: 0.2;
   }
 }

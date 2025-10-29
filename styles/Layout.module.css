@@ -34,8 +34,30 @@
   border-left: 1px solid #1e1f29;
 }
 
+@media screen and (max-width: 900px) {
+  .content {
+    padding: 1.75rem 1.5rem;
+    height: 82vh;
+  }
+
+  .content::-webkit-scrollbar {
+    width: 12px;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .content {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+    height: 80vh;
+  }
+
+  .content::-webkit-scrollbar {
+    width: 10px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .content {
+    padding: 1.25rem 0.875rem;
   }
 }

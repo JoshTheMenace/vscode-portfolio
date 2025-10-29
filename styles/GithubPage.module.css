@@ -4,7 +4,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
+  min-height: 100px;
+  height: auto;
   margin-bottom: 1.5rem;
 }
 
@@ -16,7 +17,7 @@
   align-items: center;
   border-right: 2px solid var(--accent-color);
   padding: 0 1rem;
-  height: 100%;
+  min-height: 60px;
 }
 
 .user > div:last-child {
@@ -43,16 +44,94 @@
 }
 
 @media screen and (max-width: 900px) {
+  .user {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .user > div {
+    padding: 0 0.75rem;
+  }
+
   .user h3 {
     font-size: 1rem;
+  }
+
+  .container {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .title {
+    font-size: 1.35rem;
+    margin-bottom: 1.25rem;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .user h3 {
-    font-size: 14px;
+  .user {
+    flex-direction: column;
+    padding: 1rem;
+    height: auto;
+    gap: 0.75rem;
   }
+
+  .user > div {
+    border-right: none;
+    border-bottom: 1px solid var(--accent-color);
+    padding: 0.75rem 0.5rem;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .user > div:last-child {
+    border-bottom: none;
+  }
+
+  .user h3 {
+    font-size: 0.95rem;
+  }
+
+  .user p {
+    font-size: 0.85rem;
+  }
+
   .username {
     display: none;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .contributions {
+    overflow-x: auto;
+  }
+
+  .contributions article {
+    min-width: 280px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .user h3 {
+    font-size: 0.875rem;
+  }
+
+  .user p {
+    font-size: 0.8rem;
+  }
+
+  .title {
+    font-size: 1.15rem;
+  }
+
+  .container {
+    gap: 0.875rem;
   }
 }

@@ -1,6 +1,7 @@
 .bottomBar {
   background: var(--bottombar-bg);
-  height: 25px;
+  min-height: 25px;
+  height: auto;
   border-top: 1px solid var(--bottombar-border);
   color: rgb(225, 228, 232);
   padding: 0 0.5rem;
@@ -8,6 +9,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .bottomBar a {
@@ -38,11 +40,58 @@
   background: var(--bottombar-hover-bg);
 }
 
+@media screen and (max-width: 900px) {
+  .bottomBar {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.4rem;
+    min-height: 28px;
+  }
+
+  .section {
+    margin-right: 0.4rem;
+    padding: 0 0.15rem;
+  }
+
+  .icon {
+    margin-right: 3px;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .bottomBar {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.35rem;
+    min-height: 30px;
+    gap: 0.25rem;
   }
+
+  .container {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
   .section {
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
+    padding: 0.2rem 0.25rem;
+    height: auto;
+    min-height: 24px;
+  }
+
+  .icon {
+    margin-right: 2px;
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .bottomBar {
+    font-size: 0.65rem;
+    padding: 0.25rem;
+  }
+
+  .section {
+    margin-right: 0.25rem;
+    padding: 0.15rem 0.2rem;
   }
 }

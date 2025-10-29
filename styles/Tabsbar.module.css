@@ -3,16 +3,43 @@
   /* flex-wrap: wrap; */
   background: var(--tabs-bg);
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--tabs-bg);
+}
+
+.tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tabs::-webkit-scrollbar-track {
+  background: var(--tabs-bg);
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+@media screen and (max-width: 1100px) {
+  .tabs {
+    width: 76vw;
+  }
 }
 
 @media screen and (max-width: 900px) {
   .tabs {
-    width: 78vw;
+    width: 72vw;
   }
 }
 
 @media screen and (max-width: 600px) {
   .tabs {
-    width: 89.5vw;
+    width: 88vw;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .tabs {
+    width: 86vw;
   }
 }
