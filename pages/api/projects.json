@@ -10,7 +10,7 @@
     "appStore": "https://play.google.com/store/apps/details?id=co.wholi&hl=en_US"
   },
   {
-    "id": 8,
+    "id": 2,
     "name": "Utah Road Conditions",
     "image": "https://media.licdn.com/dms/image/v2/D5622AQGshJOiRHSavQ/feedshare-shrink_2048_1536/B56ZpQsvnYI8Aw-/0/1762290498542?e=1763596800&v=beta&t=tiPrxv2qNLo9_h3uQIyLhrLt0AlUmNXZuT2gAb3T6sM",
     "description": "Real-time live map showing current snow and road conditions across Utah's highway system. Helps drivers stay safe during winter weather.",
@@ -18,7 +18,7 @@
     "demo": "https://roads.joshthemenace.com"
   },
   {
-    "id": 2,
+    "id": 3,
     "name": "JARVIS",
     "image": "https://img.youtube.com/vi/sJgnRn_ejG4/maxresdefault.jpg",
     "description": "AI-powered voice assistant with Tony Stark-inspired AR interface. Features wake word detection, real-time audio visualization, and hands-free interaction. Built for Mission to Mars hackathon.",
@@ -27,7 +27,7 @@
     "demo": "https://www.youtube.com/shorts/sJgnRn_ejG4"
   },
   {
-    "id": 3,
+    "id": 4,
     "name": "Learnable",
     "image": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/837/204/datas/gallery.jpg",
     "description": "AI-powered educational platform with personalized lessons, interactive code execution, and real-time chat. Won 2nd place at Weber State Hackathon.",
@@ -36,7 +36,7 @@
     "demo": "https://www.youtube.com/watch?v=wGg4vOetBNg"
   },
   {
-    "id": 4,
+    "id": 5,
     "name": "PhoneAgent",
     "image": "https://img.youtube.com/vi/otLwivWkeIg/maxresdefault.jpg",
     "description": "Autonomous Android device controller using multimodal AI agents. Converts natural language to device operations. Won 2nd place at JustBuild AI Agents Hackathon.",
@@ -45,14 +45,14 @@
     "demo": "https://www.youtube.com/watch?v=otLwivWkeIg"
   },
   {
-    "id": 5,
+    "id": 6,
     "name": "Linguava - In Progress",
     "image": "https://imgur.com/n8D3KnQ.png",
     "description": "AI-first language learning application with personalized lessons and interactive practice.",
     "tags": ["flutter", "ai", "mobile"]
   },
   {
-    "id": 6,
+    "id": 7,
     "name": "Neural Network Bird",
     "image": "https://imgur.com/97Mv3uK.png",
     "description": "A neural network that learns to fly a bird through incoming pipes using genetic algorithms and backpropagation.",
@@ -60,7 +60,7 @@
     "demo": "/nn-bird"
   },
   {
-    "id": 7,
+    "id": 8,
     "name": "Old Portfolio Website",
     "image": "https://imgur.com/zkkBQqi.png",
     "description": "My previous portfolio website using three.js for 3D graphics and animations.",
