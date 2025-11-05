@@ -59,5 +59,13 @@
     "tags": ["threejs"],
     "demo": "/old",
     "web_code": "https://github.com/JoshTheMenace/my_website"
+  },
+  {
+    "id": 8,
+    "name": "Utah Road Conditions",
+    "image": "https://media.licdn.com/dms/image/v2/D5622AQGshJOiRHSavQ/feedshare-shrink_2048_1536/B56ZpQsvnYI8Aw-/0/1762290498542?e=1763596800&v=beta&t=tiPrxv2qNLo9_h3uQIyLhrLt0AlUmNXZuT2gAb3T6sM",
+    "description": "Real-time live map showing current snow and road conditions across Utah's highway system. Helps drivers stay safe during winter weather.",
+    "tags": ["javascript", "maps", "real-time", "web"],
+    "demo": "https://roads.joshthemenace.com"
   }
 ]
