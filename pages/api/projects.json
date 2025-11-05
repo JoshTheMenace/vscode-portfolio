@@ -12,9 +12,9 @@
   {
     "id": 2,
     "name": "Utah Road Conditions",
-    "image": "https://media.licdn.com/dms/image/v2/D5622AQGshJOiRHSavQ/feedshare-shrink_2048_1536/B56ZpQsvnYI8Aw-/0/1762290498542?e=1763596800&v=beta&t=tiPrxv2qNLo9_h3uQIyLhrLt0AlUmNXZuT2gAb3T6sM",
+    "image": "https://private-user-images.githubusercontent.com/26631047/510453783-d732ff9c-d0a3-491b-9b29-c141f321c2fb.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjIzODUzNzIsIm5iZiI6MTc2MjM4NTA3MiwicGF0aCI6Ii8yNjYzMTA0Ny81MTA0NTM3ODMtZDczMmZmOWMtZDBhMy00OTFiLTliMjktYzE0MWYzMjFjMmZiLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMDUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTA1VDIzMjQzMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTkzZjdjM2U5NDhiMmZjNzI2MGI2NTk4MDMxMWYyMWZlYjQ1NmFhNDQyODA2MmIwYTUzOGFmOWU0YmIwZDhlNTQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.6ABcuhRlwK9OwdBpaQkZ5CEA-gzlvrGaacbYEYhjmu4",
     "description": "Real-time live map showing current snow and road conditions across Utah's highway system. Helps drivers stay safe during winter weather.",
-    "tags": ["javascript", "maps", "real-time", "web"],
+    "tags": ["react", "typescript", "openai"],
     "demo": "https://roads.joshthemenace.com"
   },
   {
