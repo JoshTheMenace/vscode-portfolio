@@ -3,8 +3,8 @@ import styles from '../styles/ContactCode.module.css';
 const contactItems = [
   {
     social: 'website',
-    link: 'thearcher.dev',
-    href: 'https://thearcher.dev',
+    link: 'joshthemenace.com',
+    href: 'https://joshthemenace.com',
   },
   {
     social: 'email',
