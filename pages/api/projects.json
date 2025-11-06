@@ -12,7 +12,7 @@
   {
     "id": 2,
     "name": "Utah Road Conditions",
-    "image": "https://i.imgur.com/0vLUyRS.png",
+    "image": "https://i.imgur.com/ituWCE0.png",
     "description": "Real-time live map showing current snow and road conditions across Utah's highway system. Helps drivers stay safe during winter weather.",
     "tags": ["react", "next", "Machine-Learning", "ai"],
     "demo": "https://roads.joshthemenace.com"
