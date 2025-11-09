@@ -248,7 +248,7 @@
       const PIPE_SPEED = 4;
       const GRAVITY = 0.8;
       const JUMP_FORCE = -11;
-      const GAP_SIZE = 220;
+      const GAP_SIZE = 200;
       const GROUND_HEIGHT = 100;
 
       let bestFitnessEver = 0;
@@ -409,31 +409,95 @@
       }
 
       class Pipe {
-          constructor(x, top, height) {
+          constructor(x, top, height, type = 'green', gapSize = GAP_SIZE) {
               this.x = x;
               this.top = top;
               this.height = height;
               this.width = PIPE_WIDTH;
               this.scored = false;
+              this.type = type; // 'green', 'blue', 'red'
+              this.gapSize = gapSize;
+
+              // For moving pipes
+              if (type === 'blue' || type === 'red') {
+                  this.direction = Math.random() > 0.5 ? 1 : -1;
+                  this.ySpeed = type === 'red' ? 3 : 2;
+                  this.minGap = type === 'red' ? 160 : 180;
+                  this.maxGap = type === 'red' ? 200 : 220;
+              }
           }
 
           update() {
               this.x -= PIPE_SPEED;
+
+              // Moving pipe logic for blue and red pipes
+              if (this.type === 'blue' || this.type === 'red') {
+                  if (this.top === 0) {
+                      // Top pipe: adjust height
+                      if (this.direction === 1) {
+                          // Shrinking top pipe (gap moving down)
+                          if (HEIGHT - GROUND_HEIGHT - (this.height + this.gapSize) < 50) {
+                              this.direction = -1;
+                          } else {
+                              this.height -= this.ySpeed;
+                          }
+                      } else {
+                          // Growing top pipe (gap moving up)
+                          if (this.height < 50) {
+                              this.direction = 1;
+                          } else {
+                              this.height += this.ySpeed;
+                          }
+                      }
+                  } else {
+                      // Bottom pipe: adjust top and height to keep bottom fixed
+                      if (this.direction === 1) {
+                          // Gap moving down (bottom pipe grows upward)
+                          if (this.top < 50) {
+                              this.direction = -1;
+                          } else {
+                              this.top -= this.ySpeed;
+                              this.height += this.ySpeed;
+                          }
+                      } else {
+                          // Gap moving up (bottom pipe shrinks from top)
+                          if (HEIGHT - GROUND_HEIGHT - (this.top + this.height) > 50) {
+                              this.height -= this.ySpeed;
+                              this.top += this.ySpeed;
+                          } else {
+                              this.direction = 1;
+                          }
+                      }
+                  }
+              }
           }
 
           draw() {
-              // Pipe gradient
+              // Pipe gradient based on type
               const gradient = ctx.createLinearGradient(this.x, 0, this.x + this.width, 0);
-              gradient.addColorStop(0, '#2ecc71');
-              gradient.addColorStop(0.5, '#27ae60');
-              gradient.addColorStop(1, '#229954');
+
+              if (this.type === 'blue') {
+                  gradient.addColorStop(0, '#3498db');
+                  gradient.addColorStop(0.5, '#2980b9');
+                  gradient.addColorStop(1, '#1f6fa8');
+              } else if (this.type === 'red') {
+                  gradient.addColorStop(0, '#e74c3c');
+                  gradient.addColorStop(0.5, '#c0392b');
+                  gradient.addColorStop(1, '#a93226');
+              } else {
+                  gradient.addColorStop(0, '#2ecc71');
+                  gradient.addColorStop(0.5, '#27ae60');
+                  gradient.addColorStop(1, '#229954');
+              }
 
               // Main pipe body
               ctx.fillStyle = gradient;
               ctx.fillRect(this.x, this.top, this.width, this.height);
 
               // Pipe borders for depth
-              ctx.strokeStyle = '#1e8449';
+              const borderColor = this.type === 'blue' ? '#1f6fa8' :
+                                 this.type === 'red' ? '#a93226' : '#1e8449';
+              ctx.strokeStyle = borderColor;
               ctx.lineWidth = 2;
               ctx.strokeRect(this.x, this.top, this.width, this.height);
 
@@ -447,7 +511,7 @@
                   const capY = this.top + this.height - capHeight;
                   ctx.fillStyle = gradient;
                   ctx.fillRect(capX, capY, capWidth, capHeight);
-                  ctx.strokeStyle = '#1e8449';
+                  ctx.strokeStyle = borderColor;
                   ctx.strokeRect(capX, capY, capWidth, capHeight);
 
                   // Highlight
@@ -457,7 +521,7 @@
                   // Bottom pipe cap (at top)
                   ctx.fillStyle = gradient;
                   ctx.fillRect(capX, this.top, capWidth, capHeight);
-                  ctx.strokeStyle = '#1e8449';
+                  ctx.strokeStyle = borderColor;
                   ctx.strokeRect(capX, this.top, capWidth, capHeight);
 
                   // Highlight
@@ -495,16 +559,35 @@
       }
 
       function createPipes() {
-          const spaceHeight = GAP_SIZE + Math.random() * 40; // 220-260 gap
-          const minTop = 50;
-          const maxTop = HEIGHT - GROUND_HEIGHT - spaceHeight - 50;
-          const spaceTop = Math.random() * (maxTop - minTop) + minTop;
-          const spaceBottom = spaceTop + spaceHeight;
+          // Determine pipe type: 60% green, 30% blue, 10% red
+          const rand = Math.random();
+          let pipeType, gapSize;
 
-          pipes.push(
-              new Pipe(WIDTH, 0, spaceTop),
-              new Pipe(WIDTH, spaceBottom, HEIGHT - GROUND_HEIGHT - spaceBottom)
-          );
+          if (rand < 0.6) {
+              pipeType = 'green';
+              gapSize = GAP_SIZE + Math.random() * 40; // 200-240
+          } else if (rand < 0.9) {
+              pipeType = 'blue';
+              gapSize = GAP_SIZE; // 200 (will move)
+          } else {
+              pipeType = 'red';
+              gapSize = GAP_SIZE - 30; // 170 (harder + will move fast)
+          }
+
+          const minTop = 50;
+          const maxTop = HEIGHT - GROUND_HEIGHT - gapSize - 50;
+          const spaceTop = Math.random() * (maxTop - minTop) + minTop;
+          const spaceBottom = spaceTop + gapSize;
+
+          const topPipe = new Pipe(WIDTH, 0, spaceTop, pipeType, gapSize);
+          const bottomPipe = new Pipe(WIDTH, spaceBottom, HEIGHT - GROUND_HEIGHT - spaceBottom, pipeType, gapSize);
+
+          // Sync direction for paired pipes
+          if (pipeType === 'blue' || pipeType === 'red') {
+              bottomPipe.direction = topPipe.direction;
+          }
+
+          pipes.push(topPipe, bottomPipe);
       }
 
       function checkCollision(bird, pipe) {
@@ -559,11 +642,18 @@
               }
 
               // Provide default values if still no pipe (shouldn't happen with initial pipe)
-              const gapCenter = closestPipe
-                  ? (closestPipe.top === 0
-                      ? closestPipe.height + (GAP_SIZE / 2)
-                      : closestPipe.top - (GAP_SIZE / 2))
-                  : HEIGHT / 2;
+              let gapCenter;
+              if (closestPipe) {
+                  if (closestPipe.top === 0) {
+                      // Top pipe - gap is below it
+                      gapCenter = closestPipe.height + (closestPipe.gapSize || GAP_SIZE) / 2;
+                  } else {
+                      // Bottom pipe - gap is above it
+                      gapCenter = closestPipe.top - (closestPipe.gapSize || GAP_SIZE) / 2;
+                  }
+              } else {
+                  gapCenter = HEIGHT / 2;
+              }
 
               const pipeX = closestPipe ? closestPipe.x : WIDTH;
 
