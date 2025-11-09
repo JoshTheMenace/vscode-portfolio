@@ -204,7 +204,7 @@
     </div>
 
     <div class="controls">
-        <button id="homeButton">START</button>
+        <button id="homeButton" class="active">PAUSE</button>
         <button id="ffToggle">Fast Forward (3x)</button>
         <button id="resetButton">Reset Evolution</button>
     </div>
@@ -248,7 +248,7 @@
       const PIPE_SPEED = 4;
       const GRAVITY = 0.8;
       const JUMP_FORCE = -11;
-      const GAP_SIZE = 200;
+      const GAP_SIZE = 220;
       const GROUND_HEIGHT = 100;
 
       let bestFitnessEver = 0;
@@ -470,7 +470,7 @@
       let birds = [];
       let pipes = [];
       let frameCount = 0;
-      let isActive = false;
+      let isActive = true;
       let gameSpeed = 60;
 
       // Initialize clouds
@@ -482,17 +482,23 @@
           birds = [];
           pipes = [];
           pipesPassed = 0;
+          frameCount = 0;
 
           neat.creatures.forEach(c => c.score = 0);
 
           for (let i = 0; i < neat.populationSize; i++) {
               birds.push(new Bird(i));
           }
+
+          // Create initial pipes so birds have immediate targets
+          createPipes();
       }
 
       function createPipes() {
-          const spaceHeight = Math.random() * 80 + 150;
-          const spaceTop = Math.random() * (HEIGHT - GROUND_HEIGHT - spaceHeight - 100) + 50;
+          const spaceHeight = GAP_SIZE + Math.random() * 40; // 220-260 gap
+          const minTop = 50;
+          const maxTop = HEIGHT - GROUND_HEIGHT - spaceHeight - 50;
+          const spaceTop = Math.random() * (maxTop - minTop) + minTop;
           const spaceBottom = spaceTop + spaceHeight;
 
           pipes.push(
@@ -512,7 +518,7 @@
           if (!isActive) return;
 
           frameCount++;
-          if (frameCount % 120 === 0) {
+          if (frameCount % 90 === 0) {
               createPipes();
           }
 
@@ -545,26 +551,35 @@
                   bestBirdIndex = i;
               }
 
-              const closestPipe = pipes.find(p => p.x + p.width > bird.x);
-              if (closestPipe) {
-                  const gapCenter = closestPipe.top === 0
+              let closestPipe = pipes.find(p => p.x + p.width > bird.x);
+
+              // If no pipe exists, use a virtual pipe ahead for decision making
+              if (!closestPipe && pipes.length > 0) {
+                  closestPipe = pipes[pipes.length - 1];
+              }
+
+              // Provide default values if still no pipe (shouldn't happen with initial pipe)
+              const gapCenter = closestPipe
+                  ? (closestPipe.top === 0
                       ? closestPipe.height + (GAP_SIZE / 2)
-                      : closestPipe.top - (GAP_SIZE / 2);
+                      : closestPipe.top - (GAP_SIZE / 2))
+                  : HEIGHT / 2;
 
-                  const inputs = [
-                      bird.y / HEIGHT,
-                      (bird.y - gapCenter) / HEIGHT,
-                      closestPipe.x / WIDTH
-                  ];
+              const pipeX = closestPipe ? closestPipe.x : WIDTH;
 
-                  neat.creatures[i].score += 0.1;
+              const inputs = [
+                  bird.y / HEIGHT,
+                  (bird.y - gapCenter) / HEIGHT,
+                  pipeX / WIDTH
+              ];
 
-                  neat.setInputs(inputs, i);
-                  neat.creatures[i].feedForward();
+              neat.creatures[i].score += 0.1;
 
-                  if (neat.creatures[i].network.layers[2].nodes[0].value > 0.5) {
-                      bird.jump();
-                  }
+              neat.setInputs(inputs, i);
+              neat.creatures[i].feedForward();
+
+              if (neat.creatures[i].network.layers[2].nodes[0].value > 0.5) {
+                  bird.jump();
               }
 
               // Check collisions
@@ -596,7 +611,7 @@
                   pipes.splice(i, 1);
                   for (let j = 0; j < birds.length; j++) {
                       if (!birds[j].hit) {
-                          neat.creatures[j].score += 50;
+                          neat.creatures[j].score += 100;
                       }
                   }
               }
