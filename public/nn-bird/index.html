@@ -409,7 +409,7 @@
       }
 
       class Pipe {
-          constructor(x, top, height, type = 'green', gapSize = GAP_SIZE) {
+          constructor(x, top, height, type = 'green', gapSize = GAP_SIZE, pairedPipe = null) {
               this.x = x;
               this.top = top;
               this.height = height;
@@ -417,57 +417,43 @@
               this.scored = false;
               this.type = type; // 'green', 'blue', 'red'
               this.gapSize = gapSize;
+              this.pairedPipe = pairedPipe;
 
-              // For moving pipes
+              // For moving pipes - only the top pipe controls movement
               if (type === 'blue' || type === 'red') {
                   this.direction = Math.random() > 0.5 ? 1 : -1;
                   this.ySpeed = type === 'red' ? 3 : 2;
-                  this.minGap = type === 'red' ? 160 : 180;
-                  this.maxGap = type === 'red' ? 200 : 220;
+                  this.minHeight = 50;
+                  this.maxHeight = HEIGHT - GROUND_HEIGHT - gapSize - 50;
               }
           }
 
           update() {
               this.x -= PIPE_SPEED;
 
-              // Moving pipe logic for blue and red pipes
-              if (this.type === 'blue' || this.type === 'red') {
-                  if (this.top === 0) {
-                      // Top pipe: adjust height
-                      if (this.direction === 1) {
-                          // Shrinking top pipe (gap moving down)
-                          if (HEIGHT - GROUND_HEIGHT - (this.height + this.gapSize) < 50) {
-                              this.direction = -1;
-                          } else {
-                              this.height -= this.ySpeed;
-                          }
-                      } else {
-                          // Growing top pipe (gap moving up)
-                          if (this.height < 50) {
-                              this.direction = 1;
-                          } else {
-                              this.height += this.ySpeed;
-                          }
+              // Moving pipe logic - only top pipes control the movement
+              if ((this.type === 'blue' || this.type === 'red') && this.top === 0) {
+                  // Adjust top pipe height (gap moves opposite to height change)
+                  if (this.direction === 1) {
+                      // Gap moving down (top pipe grows)
+                      this.height += this.ySpeed;
+                      if (this.height >= this.maxHeight) {
+                          this.height = this.maxHeight;
+                          this.direction = -1;
                       }
                   } else {
-                      // Bottom pipe: adjust top and height to keep bottom fixed
-                      if (this.direction === 1) {
-                          // Gap moving down (bottom pipe grows upward)
-                          if (this.top < 50) {
-                              this.direction = -1;
-                          } else {
-                              this.top -= this.ySpeed;
-                              this.height += this.ySpeed;
-                          }
-                      } else {
-                          // Gap moving up (bottom pipe shrinks from top)
-                          if (HEIGHT - GROUND_HEIGHT - (this.top + this.height) > 50) {
-                              this.height -= this.ySpeed;
-                              this.top += this.ySpeed;
-                          } else {
-                              this.direction = 1;
-                          }
+                      // Gap moving up (top pipe shrinks)
+                      this.height -= this.ySpeed;
+                      if (this.height <= this.minHeight) {
+                          this.height = this.minHeight;
+                          this.direction = 1;
                       }
+                  }
+
+                  // Update paired bottom pipe to maintain constant gap
+                  if (this.pairedPipe) {
+                      this.pairedPipe.top = this.height + this.gapSize;
+                      this.pairedPipe.height = HEIGHT - GROUND_HEIGHT - this.pairedPipe.top;
                   }
               }
           }
@@ -559,19 +545,19 @@
       }
 
       function createPipes() {
-          // Determine pipe type: 60% green, 30% blue, 10% red
+          // Determine pipe type: 75% green, 20% blue, 5% red
           const rand = Math.random();
           let pipeType, gapSize;
 
-          if (rand < 0.6) {
+          if (rand < 0.75) {
               pipeType = 'green';
               gapSize = GAP_SIZE + Math.random() * 40; // 200-240
-          } else if (rand < 0.9) {
+          } else if (rand < 0.95) {
               pipeType = 'blue';
               gapSize = GAP_SIZE; // 200 (will move)
           } else {
               pipeType = 'red';
-              gapSize = GAP_SIZE - 30; // 170 (harder + will move fast)
+              gapSize = GAP_SIZE - 20; // 180 (harder + will move fast)
           }
 
           const minTop = 50;
@@ -579,13 +565,14 @@
           const spaceTop = Math.random() * (maxTop - minTop) + minTop;
           const spaceBottom = spaceTop + gapSize;
 
+          // Create top pipe first
           const topPipe = new Pipe(WIDTH, 0, spaceTop, pipeType, gapSize);
+
+          // Create bottom pipe and link them
           const bottomPipe = new Pipe(WIDTH, spaceBottom, HEIGHT - GROUND_HEIGHT - spaceBottom, pipeType, gapSize);
 
-          // Sync direction for paired pipes
-          if (pipeType === 'blue' || pipeType === 'red') {
-              bottomPipe.direction = topPipe.direction;
-          }
+          // Link the pipes so top pipe can update bottom pipe
+          topPipe.pairedPipe = bottomPipe;
 
           pipes.push(topPipe, bottomPipe);
       }
