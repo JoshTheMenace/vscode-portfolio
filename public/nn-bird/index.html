@@ -1,43 +1,228 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Flappy Bird NN</title>
-    
+    <title>Neural Network Flappy Bird</title>
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: #87CEEB;
-            margin: 0;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            min-height: 100vh;
             padding: 20px;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #7f8c8d;
+        }
+
+        .game-container {
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
         canvas {
-            border: 2px solid #000;
-            background: white;
+            display: block;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 70%, #DEB887 70%, #D2B48C 100%);
         }
+
+        .stats-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            min-width: 200px;
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 3px 0;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-value {
+            color: #2ecc71;
+            font-family: 'Courier New', monospace;
+        }
+
         .controls {
             margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
+
         button {
-            padding: 10px 20px;
-            margin: 0 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #homeButton {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        #homeButton.active {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        #ffToggle {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        #resetButton {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .nn-viz {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .nn-viz-title {
+            color: #3498db;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .info-panel {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .info-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .info-panel p {
+            color: #7f8c8d;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="header">
+        <h1>🧠 Neural Network Flappy Bird</h1>
+        <p>Watch AI learn to play using genetic algorithms (NEAT)</p>
+    </div>
+
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <div class="stats-overlay">
+            <div class="stat-row">
+                <span class="stat-label">Generation:</span>
+                <span class="stat-value" id="genCount">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Alive:</span>
+                <span class="stat-value" id="aliveCount">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Best Fitness:</span>
+                <span class="stat-value" id="bestFitness">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Current Best:</span>
+                <span class="stat-value" id="currentBest">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Pipes Passed:</span>
+                <span class="stat-value" id="pipesPassed">0</span>
+            </div>
+        </div>
+
+        <div class="nn-viz">
+            <div class="nn-viz-title">Best Bird Brain</div>
+            <canvas id="nnCanvas" width="120" height="100"></canvas>
+        </div>
+    </div>
+
     <div class="controls">
-        <button id="homeButton">STOP</button>
-        <button id="ffToggle">Fast Forward</button>
-        <!-- <button id="soundToggle">Sound</button> -->
+        <button id="homeButton" class="active">PAUSE</button>
+        <button id="ffToggle">Fast Forward (3x)</button>
+        <button id="resetButton">Reset Evolution</button>
+    </div>
+
+    <div class="info-panel">
+        <h3>About This Project</h3>
+        <p>
+            This is a demonstration of <strong>NEAT (NeuroEvolution of Augmenting Topologies)</strong>,
+            a genetic algorithm that evolves neural networks to play Flappy Bird.
+            Each bird has a simple neural network that takes 3 inputs (bird Y position, distance to gap center,
+            and pipe distance) and decides whether to jump. The birds that survive longer pass their
+            "genes" to the next generation, gradually improving performance over time.
+        </p>
     </div>
 
     <script language="javascript" type="text/javascript" src="/nn-bird/NEAT_browser.js"></script>
     <script>
-      // First, define the NEAT configuration
+      // NEAT configuration
       const neatConfig = {
           model: [
               {nodeCount: 3, type: "input"},
@@ -50,12 +235,13 @@
           crossoverMethod: crossover.AVERAGE
       };
 
-      // Initialize NEAT
       const neat = new NEAT(neatConfig);
 
       const canvas = document.getElementById('gameCanvas');
       const ctx = canvas.getContext('2d');
-      
+      const nnCanvas = document.getElementById('nnCanvas');
+      const nnCtx = nnCanvas.getContext('2d');
+
       const WIDTH = 800;
       const HEIGHT = 600;
       const PIPE_WIDTH = 70;
@@ -63,95 +249,271 @@
       const GRAVITY = 0.8;
       const JUMP_FORCE = -11;
       const GAP_SIZE = 200;
+      const GROUND_HEIGHT = 100;
+
+      let bestFitnessEver = 0;
+      let pipesPassed = 0;
+      let clouds = [];
+      let particles = [];
+
+      // Cloud class for background
+      class Cloud {
+          constructor() {
+              this.x = Math.random() * WIDTH;
+              this.y = Math.random() * (HEIGHT * 0.5);
+              this.width = Math.random() * 60 + 40;
+              this.height = this.width * 0.6;
+              this.speed = Math.random() * 0.5 + 0.2;
+          }
+
+          update() {
+              this.x -= this.speed;
+              if (this.x + this.width < 0) {
+                  this.x = WIDTH;
+                  this.y = Math.random() * (HEIGHT * 0.5);
+              }
+          }
+
+          draw() {
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, this.width * 0.3, 0, Math.PI * 2);
+              ctx.arc(this.x + this.width * 0.3, this.y, this.width * 0.35, 0, Math.PI * 2);
+              ctx.arc(this.x + this.width * 0.6, this.y, this.width * 0.3, 0, Math.PI * 2);
+              ctx.fill();
+          }
+      }
+
+      // Particle class for effects
+      class Particle {
+          constructor(x, y, color) {
+              this.x = x;
+              this.y = y;
+              this.vx = (Math.random() - 0.5) * 4;
+              this.vy = (Math.random() - 0.5) * 4;
+              this.alpha = 1;
+              this.color = color;
+              this.size = Math.random() * 3 + 2;
+          }
+
+          update() {
+              this.x += this.vx;
+              this.y += this.vy;
+              this.vy += 0.1;
+              this.alpha -= 0.02;
+          }
+
+          draw() {
+              ctx.globalAlpha = this.alpha;
+              ctx.fillStyle = this.color;
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.globalAlpha = 1;
+          }
+      }
 
       class Bird {
-          constructor() {
-              this.width = 40;
-              this.height = 40;
+          constructor(index) {
+              this.width = 34;
+              this.height = 24;
               this.x = WIDTH / 4;
               this.y = HEIGHT / 2;
               this.velocity = 0;
               this.hit = false;
+              this.index = index;
+              this.wingAngle = 0;
+              this.rotation = 0;
           }
 
           update() {
               this.velocity += GRAVITY;
               this.y += this.velocity;
 
-              if (this.y + this.height >= HEIGHT) {
-                  this.y = HEIGHT - this.height;
+              // Update rotation based on velocity
+              this.rotation = Math.min(Math.max(this.velocity * 3, -30), 90) * Math.PI / 180;
+
+              // Wing flapping animation
+              this.wingAngle += 0.3;
+
+              if (this.y + this.height >= HEIGHT - GROUND_HEIGHT) {
+                  this.y = HEIGHT - GROUND_HEIGHT - this.height;
                   this.velocity = 0;
-                  // this.hit = true;
+                  this.hit = true;
               }
               if (this.y <= 0) {
                   this.y = 0;
                   this.velocity = 0;
-                  // this.hit = true;
+                  this.hit = true;
               }
           }
 
           jump() {
-              // if (this.velocity > -5) {
-                  this.velocity = JUMP_FORCE;
-              // }
+              this.velocity = JUMP_FORCE;
           }
 
-          draw() {
-            if (this.hit) 
-            return;
-              ctx.fillStyle = this.hit ? 'red' : 'yellow';
-              ctx.fillRect(this.x, this.y, this.width, this.height);
+          draw(isBest = false) {
+              if (this.hit) return;
+
+              ctx.save();
+              ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+              ctx.rotate(this.rotation);
+
+              // Glow for best bird
+              if (isBest) {
+                  ctx.shadowColor = '#FFD700';
+                  ctx.shadowBlur = 20;
+              }
+
+              // Bird body
+              const gradient = ctx.createLinearGradient(-this.width/2, -this.height/2, -this.width/2, this.height/2);
+              gradient.addColorStop(0, isBest ? '#FFD700' : '#FFA500');
+              gradient.addColorStop(1, isBest ? '#FFA500' : '#FF8C00');
+              ctx.fillStyle = gradient;
+
+              // Main body (oval)
+              ctx.beginPath();
+              ctx.ellipse(0, 0, this.width / 2, this.height / 2, 0, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Wing
+              ctx.fillStyle = isBest ? '#FFB400' : '#FF6347';
+              const wingOffset = Math.sin(this.wingAngle) * 5;
+              ctx.beginPath();
+              ctx.ellipse(-5, 0, 12, 8 + wingOffset, -0.3, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Eye white
+              ctx.fillStyle = 'white';
+              ctx.beginPath();
+              ctx.arc(8, -5, 5, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Eye pupil
+              ctx.fillStyle = 'black';
+              ctx.beginPath();
+              ctx.arc(9, -5, 2, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Beak
+              ctx.fillStyle = '#FFA500';
+              ctx.beginPath();
+              ctx.moveTo(this.width / 2 - 5, 0);
+              ctx.lineTo(this.width / 2 + 5, 2);
+              ctx.lineTo(this.width / 2 - 5, 4);
+              ctx.closePath();
+              ctx.fill();
+
+              ctx.restore();
           }
       }
 
       class Pipe {
-          constructor(x, top, height, isBlue = false) {
+          constructor(x, top, height, type = 'green', gapSize = GAP_SIZE, pairedPipe = null) {
               this.x = x;
               this.top = top;
               this.height = height;
               this.width = PIPE_WIDTH;
-              this.isBlue = isBlue;
-              this.direction = Math.random() > 0.5 ? 1 : -1;
-              this.ySpeed = 2;
+              this.scored = false;
+              this.type = type; // 'green', 'blue', 'red'
+              this.gapSize = gapSize;
+              this.pairedPipe = pairedPipe;
+
+              // For moving pipes - only the top pipe controls movement
+              if (type === 'blue' || type === 'red') {
+                  this.direction = Math.random() > 0.5 ? 1 : -1;
+                  this.ySpeed = type === 'red' ? 3 : 2;
+                  this.minHeight = 50;
+                  this.maxHeight = HEIGHT - GROUND_HEIGHT - gapSize - 50;
+              }
           }
 
           update() {
               this.x -= PIPE_SPEED;
-              
-              if (this.isBlue) {
-                  if (this.top === 0) {
-                      if (this.direction === 1) {
-                          if (this.height <= this.ySpeed * 3) {
-                              this.direction = -1;
-                          }
-                          this.height -= this.ySpeed;
-                      } else {
-                          if (HEIGHT - (this.top + this.height) < GAP_SIZE + this.ySpeed * 3) {
-                              this.direction = 1;
-                          }
-                          this.height += this.ySpeed;
+
+              // Moving pipe logic - only top pipes control the movement
+              if ((this.type === 'blue' || this.type === 'red') && this.top === 0) {
+                  // Adjust top pipe height (gap moves opposite to height change)
+                  if (this.direction === 1) {
+                      // Gap moving down (top pipe grows)
+                      this.height += this.ySpeed;
+                      if (this.height >= this.maxHeight) {
+                          this.height = this.maxHeight;
+                          this.direction = -1;
                       }
                   } else {
-                      if (this.direction === 1) {
-                          if (this.top < GAP_SIZE + this.ySpeed * 3) {
-                              this.direction = -1;
-                          }
-                          this.top -= this.ySpeed;
-                          this.height += this.ySpeed;
-                      } else {
-                          if (this.height <= this.ySpeed * 3) {
-                              this.direction = 1;
-                          }
-                          this.top += this.ySpeed;
-                          this.height -= this.ySpeed;
+                      // Gap moving up (top pipe shrinks)
+                      this.height -= this.ySpeed;
+                      if (this.height <= this.minHeight) {
+                          this.height = this.minHeight;
+                          this.direction = 1;
                       }
+                  }
+
+                  // Update paired bottom pipe to maintain constant gap
+                  if (this.pairedPipe) {
+                      this.pairedPipe.top = this.height + this.gapSize;
+                      this.pairedPipe.height = HEIGHT - GROUND_HEIGHT - this.pairedPipe.top;
                   }
               }
           }
 
           draw() {
-              ctx.fillStyle = this.isBlue ? 'blue' : 'green';
+              // Pipe gradient based on type
+              const gradient = ctx.createLinearGradient(this.x, 0, this.x + this.width, 0);
+
+              if (this.type === 'blue') {
+                  gradient.addColorStop(0, '#3498db');
+                  gradient.addColorStop(0.5, '#2980b9');
+                  gradient.addColorStop(1, '#1f6fa8');
+              } else if (this.type === 'red') {
+                  gradient.addColorStop(0, '#e74c3c');
+                  gradient.addColorStop(0.5, '#c0392b');
+                  gradient.addColorStop(1, '#a93226');
+              } else {
+                  gradient.addColorStop(0, '#2ecc71');
+                  gradient.addColorStop(0.5, '#27ae60');
+                  gradient.addColorStop(1, '#229954');
+              }
+
+              // Main pipe body
+              ctx.fillStyle = gradient;
               ctx.fillRect(this.x, this.top, this.width, this.height);
+
+              // Pipe borders for depth
+              const borderColor = this.type === 'blue' ? '#1f6fa8' :
+                                 this.type === 'red' ? '#a93226' : '#1e8449';
+              ctx.strokeStyle = borderColor;
+              ctx.lineWidth = 2;
+              ctx.strokeRect(this.x, this.top, this.width, this.height);
+
+              // Pipe cap
+              const capHeight = 25;
+              const capWidth = this.width + 8;
+              const capX = this.x - 4;
+
+              if (this.top === 0) {
+                  // Top pipe cap (at bottom)
+                  const capY = this.top + this.height - capHeight;
+                  ctx.fillStyle = gradient;
+                  ctx.fillRect(capX, capY, capWidth, capHeight);
+                  ctx.strokeStyle = borderColor;
+                  ctx.strokeRect(capX, capY, capWidth, capHeight);
+
+                  // Highlight
+                  ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                  ctx.fillRect(this.x + 5, this.top, 3, this.height - capHeight);
+              } else {
+                  // Bottom pipe cap (at top)
+                  ctx.fillStyle = gradient;
+                  ctx.fillRect(capX, this.top, capWidth, capHeight);
+                  ctx.strokeStyle = borderColor;
+                  ctx.strokeRect(capX, this.top, capWidth, capHeight);
+
+                  // Highlight
+                  ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                  ctx.fillRect(this.x + 5, this.top + capHeight, 3, this.height - capHeight);
+              }
           }
       }
 
@@ -161,33 +523,58 @@
       let isActive = true;
       let gameSpeed = 60;
 
+      // Initialize clouds
+      for (let i = 0; i < 5; i++) {
+          clouds.push(new Cloud());
+      }
+
       function initGame() {
           birds = [];
           pipes = [];
+          pipesPassed = 0;
+          frameCount = 0;
 
-          // In initGame(), reset fitness for all creatures:
           neat.creatures.forEach(c => c.score = 0);
-          
-          // Create a bird for each creature in the population
+
           for (let i = 0; i < neat.populationSize; i++) {
-              birds.push(new Bird());
+              birds.push(new Bird(i));
           }
+
+          // Create initial pipes so birds have immediate targets
+          createPipes();
       }
 
       function createPipes() {
-          // const isBlue = Math.random() < 0.25;
-          const isBlue = false;
-          const spaceHeight = isBlue ? 
-              Math.random() * 65 + 175 : // 175-240 for blue pipes
-              Math.random() * 80 + 150;  // 150-230 for green pipes
-          
-          const spaceTop = Math.random() * (HEIGHT - spaceHeight - 100) + 50;
-          const spaceBottom = spaceTop + spaceHeight;
-          
-          pipes.push(
-              new Pipe(WIDTH, 0, spaceTop, isBlue),
-              new Pipe(WIDTH, spaceBottom, HEIGHT - spaceBottom, isBlue)
-          );
+          // Determine pipe type: 60% green, 30% blue, 10% red
+          const rand = Math.random();
+          let pipeType, gapSize;
+
+          if (rand < 0.6) {
+              pipeType = 'green';
+              gapSize = 170 + Math.random() * 40; // 170-210
+          } else if (rand < 0.9) {
+              pipeType = 'blue';
+              gapSize = 175; // 175 (will move)
+          } else {
+              pipeType = 'red';
+              gapSize = 155; // 155 (harder + will move fast)
+          }
+
+          const minTop = 50;
+          const maxTop = HEIGHT - GROUND_HEIGHT - gapSize - 50;
+          const spaceTop = Math.random() * (maxTop - minTop) + minTop;
+          const spaceBottom = spaceTop + gapSize;
+
+          // Create top pipe first
+          const topPipe = new Pipe(WIDTH, 0, spaceTop, pipeType, gapSize);
+
+          // Create bottom pipe and link them
+          const bottomPipe = new Pipe(WIDTH, spaceBottom, HEIGHT - GROUND_HEIGHT - spaceBottom, pipeType, gapSize);
+
+          // Link the pipes so top pipe can update bottom pipe
+          topPipe.pairedPipe = bottomPipe;
+
+          pipes.push(topPipe, bottomPipe);
       }
 
       function checkCollision(bird, pipe) {
@@ -201,62 +588,85 @@
           if (!isActive) return;
 
           frameCount++;
-          if (frameCount % 120 === 0) {
+          if (frameCount % 90 === 0) {
               createPipes();
+          }
+
+          // Update clouds
+          clouds.forEach(cloud => cloud.update());
+
+          // Update particles
+          for (let i = particles.length - 1; i >= 0; i--) {
+              particles[i].update();
+              if (particles[i].alpha <= 0) {
+                  particles.splice(i, 1);
+              }
           }
 
           // Update birds
           let aliveBirds = 0;
+          let bestBirdIndex = -1;
+          let bestBirdScore = -1;
+
           for (let i = 0; i < birds.length; i++) {
               const bird = birds[i];
               if (bird.hit) continue;
-              
+
               bird.update();
               aliveBirds++;
 
-              // Get closest pipe
-              const closestPipe = pipes.find(p => p.x + p.width > bird.x);
-              if (closestPipe) {
-                  // Replace the input calculation with:
-                  const gapCenter = closestPipe.top === 0 
-                      ? closestPipe.height + (GAP_SIZE / 2)  // Top pipe is upper part of gap
-                      : closestPipe.top - (GAP_SIZE / 2);    // Bottom pipe's top is gap end
-
-                  // Neural network inputs
-                  const inputs = [
-                      bird.y / HEIGHT,
-                      (bird.y - gapCenter) / HEIGHT,  // Signed distance to gap center
-                      closestPipe.x / WIDTH
-                  ];
-
-                 // Each frame, do:
-                  if (!bird.hit) {
-                      neat.creatures[i].score += 0.1;
-                  }
-
-                  // Then, once the bird hits a pipe or the floor:
-                  if (bird.hit) {
-                      neat.setFitness(neat.creatures[i].score, i);
-                  }
-
-                  // Set inputs for the creature
-                  neat.setInputs(inputs, i);
-                  
-                  // Feed forward
-                  neat.creatures[i].feedForward();
-                  
-                  // Get decision and jump if output is high enough
-                  if (neat.creatures[i].network.layers[2].nodes[0].value > 0.5) {
-                      bird.jump();
-                  }
-
+              // Track best bird
+              if (neat.creatures[i].score > bestBirdScore) {
+                  bestBirdScore = neat.creatures[i].score;
+                  bestBirdIndex = i;
               }
-              
+
+              let closestPipe = pipes.find(p => p.x + p.width > bird.x);
+
+              // If no pipe exists, use a virtual pipe ahead for decision making
+              if (!closestPipe && pipes.length > 0) {
+                  closestPipe = pipes[pipes.length - 1];
+              }
+
+              // Provide default values if still no pipe (shouldn't happen with initial pipe)
+              let gapCenter;
+              if (closestPipe) {
+                  if (closestPipe.top === 0) {
+                      // Top pipe - gap is below it
+                      gapCenter = closestPipe.height + (closestPipe.gapSize || GAP_SIZE) / 2;
+                  } else {
+                      // Bottom pipe - gap is above it
+                      gapCenter = closestPipe.top - (closestPipe.gapSize || GAP_SIZE) / 2;
+                  }
+              } else {
+                  gapCenter = HEIGHT / 2;
+              }
+
+              const pipeX = closestPipe ? closestPipe.x : WIDTH;
+
+              const inputs = [
+                  bird.y / HEIGHT,
+                  (bird.y - gapCenter) / HEIGHT,
+                  pipeX / WIDTH
+              ];
+
+              neat.creatures[i].score += 0.1;
+
+              neat.setInputs(inputs, i);
+              neat.creatures[i].feedForward();
+
+              if (neat.creatures[i].network.layers[2].nodes[0].value > 0.5) {
+                  bird.jump();
+              }
 
               // Check collisions
               for (const pipe of pipes) {
                   if (checkCollision(bird, pipe)) {
                       bird.hit = true;
+                      // Create particles
+                      for (let j = 0; j < 10; j++) {
+                          particles.push(new Particle(bird.x + bird.width / 2, bird.y + bird.height / 2, '#FF6347'));
+                      }
                       break;
                   }
               }
@@ -265,38 +675,154 @@
           // Update pipes
           for (let i = pipes.length - 1; i >= 0; i--) {
               pipes[i].update();
+
+              // Score pipes
+              if (!pipes[i].scored && pipes[i].x + pipes[i].width < birds[0]?.x) {
+                  pipes[i].scored = true;
+                  if (pipes[i].top === 0) { // Only count top pipes
+                      pipesPassed++;
+                  }
+              }
+
               if (pipes[i].x + pipes[i].width < 0) {
                   pipes.splice(i, 1);
-                  // Reward surviving birds
                   for (let j = 0; j < birds.length; j++) {
                       if (!birds[j].hit) {
-                          neat.setFitness(neat.creatures[j].score + 50, j);
+                          neat.creatures[j].score += 100;
                       }
                   }
               }
           }
 
-          // If all birds are dead, evolve and reset
+          // Store best bird for drawing
+          window.bestBirdIndex = bestBirdIndex;
+
+          // Update stats
+          document.getElementById('aliveCount').textContent = aliveBirds;
+          document.getElementById('currentBest').textContent = Math.floor(bestBirdScore);
+          document.getElementById('pipesPassed').textContent = pipesPassed;
+
+          // If all birds are dead, evolve
           if (aliveBirds === 0) {
+              const currentBest = Math.max(...neat.creatures.map(c => c.score));
+              bestFitnessEver = Math.max(bestFitnessEver, currentBest);
+              document.getElementById('bestFitness').textContent = Math.floor(bestFitnessEver);
+
               neat.doGen();
+              document.getElementById('genCount').textContent = neat.generation;
               initGame();
           }
+      }
+
+      function drawBackground() {
+          // Sky gradient (already in CSS background, but add some clouds)
+          clouds.forEach(cloud => cloud.draw());
+
+          // Ground
+          const groundY = HEIGHT - GROUND_HEIGHT;
+          const groundGradient = ctx.createLinearGradient(0, groundY, 0, HEIGHT);
+          groundGradient.addColorStop(0, '#8B7355');
+          groundGradient.addColorStop(0.3, '#A0826D');
+          groundGradient.addColorStop(1, '#8B7355');
+          ctx.fillStyle = groundGradient;
+          ctx.fillRect(0, groundY, WIDTH, GROUND_HEIGHT);
+
+          // Grass on top of ground
+          ctx.fillStyle = '#7CB342';
+          ctx.fillRect(0, groundY, WIDTH, 10);
+
+          // Ground details
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          for (let i = 0; i < WIDTH; i += 40) {
+              ctx.fillRect(i, groundY + 20, 30, 3);
+          }
+      }
+
+      function drawNeuralNetwork() {
+          if (!window.bestBirdIndex || window.bestBirdIndex < 0) return;
+
+          const creature = neat.creatures[window.bestBirdIndex];
+          if (!creature) return;
+
+          nnCtx.clearRect(0, 0, nnCanvas.width, nnCanvas.height);
+
+          const layers = creature.network.layers;
+          const layerSpacing = nnCanvas.width / (layers.length + 1);
+          const nodePositions = [];
+
+          // Calculate positions
+          layers.forEach((layer, layerIndex) => {
+              const x = layerSpacing * (layerIndex + 1);
+              const nodeCount = layer.nodes.length;
+              const nodeSpacing = nnCanvas.height / (nodeCount + 1);
+
+              nodePositions[layerIndex] = [];
+              layer.nodes.forEach((node, nodeIndex) => {
+                  const y = nodeSpacing * (nodeIndex + 1);
+                  nodePositions[layerIndex].push({x, y, value: node.value});
+              });
+          });
+
+          // Draw connections
+          for (let l = 0; l < layers.length - 1; l++) {
+              for (let i = 0; i < nodePositions[l].length; i++) {
+                  for (let j = 0; j < nodePositions[l + 1].length; j++) {
+                      const pos1 = nodePositions[l][i];
+                      const pos2 = nodePositions[l + 1][j];
+
+                      nnCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                      nnCtx.lineWidth = 1;
+                      nnCtx.beginPath();
+                      nnCtx.moveTo(pos1.x, pos1.y);
+                      nnCtx.lineTo(pos2.x, pos2.y);
+                      nnCtx.stroke();
+                  }
+              }
+          }
+
+          // Draw nodes
+          nodePositions.forEach((layer, layerIndex) => {
+              layer.forEach(pos => {
+                  const value = Math.abs(pos.value);
+                  const color = `rgba(52, 152, 219, ${0.3 + value * 0.7})`;
+
+                  nnCtx.fillStyle = color;
+                  nnCtx.beginPath();
+                  nnCtx.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+                  nnCtx.fill();
+
+                  nnCtx.strokeStyle = '#3498db';
+                  nnCtx.lineWidth = 2;
+                  nnCtx.stroke();
+              });
+          });
       }
 
       function draw() {
           ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
+          drawBackground();
+
           // Draw pipes
           pipes.forEach(pipe => pipe.draw());
 
-          // Draw birds
-          birds.forEach(bird => bird.draw());
+          // Draw particles
+          particles.forEach(particle => particle.draw());
 
-          // Draw UI
-          ctx.fillStyle = 'black';
-          ctx.font = '20px Arial';
-          ctx.fillText(`Birds Alive: ${birds.filter(b => !b.hit).length}`, 10, 30);
-          ctx.fillText(`Generation: ${neat.generation}`, 10, 60);
+          // Draw all birds (non-best first)
+          birds.forEach((bird, index) => {
+              if (index !== window.bestBirdIndex) {
+                  bird.draw(false);
+              }
+          });
+
+          // Draw best bird last (on top)
+          if (window.bestBirdIndex >= 0 && birds[window.bestBirdIndex]) {
+              birds[window.bestBirdIndex].draw(true);
+          }
+
+          // Draw neural network visualization
+          drawNeuralNetwork();
       }
 
       function gameLoop() {
@@ -307,22 +833,41 @@
 
       // Event Listeners
       document.getElementById('ffToggle').addEventListener('click', () => {
-          gameSpeed = gameSpeed === 60 ? 180 : 60;
-          document.getElementById('ffToggle').innerText = gameSpeed === 60 ? 'Fast Forward' : 'Normal Speed';
+          if (gameSpeed === 60) {
+              gameSpeed = 180;
+              document.getElementById('ffToggle').innerText = 'Fast Forward (10x)';
+          } else if (gameSpeed === 180) {
+              gameSpeed = 600;
+              document.getElementById('ffToggle').innerText = 'Normal Speed';
+          } else {
+              gameSpeed = 60;
+              document.getElementById('ffToggle').innerText = 'Fast Forward (3x)';
+          }
       });
-
-      // document.getElementById('soundToggle').addEventListener('click', () => {
-      //     // Toggle sound logic here
-      // });
 
       document.getElementById('homeButton').addEventListener('click', () => {
           isActive = !isActive;
-          document.getElementById('homeButton').innerText = isActive ? 'STOP' : 'START';
+          document.getElementById('homeButton').innerText = isActive ? 'PAUSE' : 'START';
+          document.getElementById('homeButton').classList.toggle('active');
+      });
+
+      document.getElementById('resetButton').addEventListener('click', () => {
+          if (confirm('Reset evolution and start from generation 1?')) {
+              // Reinitialize NEAT
+              const newNeat = new NEAT(neatConfig);
+              Object.assign(neat, newNeat);
+              bestFitnessEver = 0;
+              pipesPassed = 0;
+              document.getElementById('genCount').textContent = '1';
+              document.getElementById('bestFitness').textContent = '0';
+              initGame();
+          }
       });
 
       // Start the game
       initGame();
       gameLoop();
+      document.getElementById('genCount').textContent = neat.generation;
   </script>
 </body>
 </html>
