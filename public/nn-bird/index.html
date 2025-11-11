@@ -545,19 +545,19 @@
       }
 
       function createPipes() {
-          // Determine pipe type: 75% green, 20% blue, 5% red
+          // Determine pipe type: 60% green, 30% blue, 10% red
           const rand = Math.random();
           let pipeType, gapSize;
 
-          if (rand < 0.75) {
+          if (rand < 0.6) {
               pipeType = 'green';
-              gapSize = GAP_SIZE + Math.random() * 40; // 200-240
-          } else if (rand < 0.95) {
+              gapSize = 170 + Math.random() * 40; // 170-210
+          } else if (rand < 0.9) {
               pipeType = 'blue';
-              gapSize = GAP_SIZE; // 200 (will move)
+              gapSize = 175; // 175 (will move)
           } else {
               pipeType = 'red';
-              gapSize = GAP_SIZE - 20; // 180 (harder + will move fast)
+              gapSize = 155; // 155 (harder + will move fast)
           }
 
           const minTop = 50;
