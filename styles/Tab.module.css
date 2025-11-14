@@ -19,3 +19,13 @@
   background: var(--tab-active-bg);
   border-bottom: none;
 }
+
+@media screen and (max-width: 600px) {
+  .tab {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .tab p {
+    margin-left: 3px;
+  }
+}

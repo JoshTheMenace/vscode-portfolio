@@ -36,6 +36,10 @@
 
 @media screen and (max-width: 600px) {
   .content {
-    padding: 2rem 1rem;
+    padding: 1rem 0.75rem;
+    height: 82vh;
+  }
+  .main {
+    overflow-x: hidden;
   }
 }

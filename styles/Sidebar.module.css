@@ -54,11 +54,12 @@
 
 @media screen and (max-width: 600px) {
   .sidebar {
-    width: 10vw;
+    width: 50px;
+    min-width: 50px;
   }
   .icon {
-    height: 40px;
-    width: 40px;
-    padding: 0.6rem;
+    height: 44px;
+    width: 44px;
+    padding: 0.5rem;
   }
 }
