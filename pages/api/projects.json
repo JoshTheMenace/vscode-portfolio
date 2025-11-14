@@ -12,7 +12,7 @@
   {
     "id": 2,
     "name": "Utah Road Conditions",
-    "image": "https://i.imgur.com/ituWCE0.png",
+    "image": "https://i.imgur.com/0vLUyRS.png",
     "description": "Real-time live map showing current snow and road conditions across Utah's highway system. Helps drivers stay safe during winter weather.",
     "tags": ["react", "next", "Machine-Learning", "ai"],
     "demo": "https://roads.joshthemenace.com"
@@ -54,7 +54,7 @@
   {
     "id": 7,
     "name": "Neural Network Bird",
-    "image": "https://imgur.com/97Mv3uK.png",
+    "image": "https://i.imgur.com/L5H8JVx.png",
     "description": "A neural network that learns to fly a bird through incoming pipes using genetic algorithms and backpropagation.",
     "tags": ["Machine-Learning", "Neural-Networks"],
     "demo": "/nn-bird"
