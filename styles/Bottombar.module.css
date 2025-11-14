@@ -40,9 +40,14 @@
 
 @media screen and (max-width: 600px) {
   .bottomBar {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
+    padding: 0 0.3rem;
   }
   .section {
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
+    padding: 0 0.15rem;
+  }
+  .icon {
+    margin-right: 2px;
   }
 }

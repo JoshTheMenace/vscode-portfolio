@@ -39,3 +39,21 @@
   color: var(--accent-color);
   margin-right: 0.3rem;
 }
+
+@media screen and (max-width: 600px) {
+  .card {
+    padding: 0.8rem;
+  }
+  .card p {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .stats {
+    font-size: 0.85rem;
+  }
+}

@@ -192,8 +192,14 @@
 
 /* Phone */
 @media screen and (max-width: 600px) {
+  .container {
+    height: auto;
+    min-height: 75vh;
+  }
   .foreground {
     margin: 0;
+    flex-direction: column;
+    align-items: flex-start;
   }
   .name {
     font-size: 2rem;
@@ -204,16 +210,22 @@
   }
   .button {
     font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
   }
   .outlined {
     font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    margin-bottom: 0.5rem;
   }
   .illustration {
     position: absolute;
     bottom: 0;
     right: 0;
     width: 75vw;
-    height: 50vh;
+    height: 45vh;
     z-index: 1;
+    opacity: 0.3;
   }
 }

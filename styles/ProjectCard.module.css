@@ -60,3 +60,28 @@
 .underline:hover {
   background-size: 100% 88%;
 }
+
+@media screen and (max-width: 600px) {
+  .card {
+    border-radius: 15px;
+  }
+  .content {
+    padding: 0.8rem;
+    border-radius: 0 0 15px 15px;
+  }
+  .content h3 {
+    font-size: 1rem;
+  }
+  .content p {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+  .tags span {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    margin: 0.3rem 0.3rem 0 0;
+  }
+  .underline {
+    font-size: 0.85rem;
+  }
+}

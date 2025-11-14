@@ -49,10 +49,26 @@
 }
 
 @media screen and (max-width: 600px) {
+  .user {
+    padding: 1rem 0.5rem;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  .user > div {
+    padding: 0 0.5rem;
+  }
   .user h3 {
     font-size: 14px;
   }
   .username {
     display: none;
+  }
+  .container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .title {
+    margin-bottom: 1rem;
   }
 }
