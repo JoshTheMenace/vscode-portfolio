@@ -6,7 +6,7 @@
     "description": "E-commerce platform for local farmers to sell their produce directly to consumers.",
     "tags": ["next", "flutter", "tailwind", "firebase", "stripe"],
     "source_code": "",
-    "demo": "https://shop.wholi.co/",
+    "demo": "https://wholi.co",
     "appStore": "https://play.google.com/store/apps/details?id=co.wholi&hl=en_US"
   },
   {
