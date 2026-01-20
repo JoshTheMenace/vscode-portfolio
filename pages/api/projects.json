@@ -46,26 +46,10 @@
   },
   {
     "id": 6,
-    "name": "Linguava - In Progress",
-    "image": "https://imgur.com/n8D3KnQ.png",
-    "description": "AI-first language learning application with personalized lessons and interactive practice.",
-    "tags": ["flutter", "ai", "mobile"]
-  },
-  {
-    "id": 7,
     "name": "Neural Network Bird",
     "image": "https://i.imgur.com/L5H8JVx.png",
     "description": "A neural network that learns to fly a bird through incoming pipes using genetic algorithms and backpropagation.",
     "tags": ["Machine-Learning", "Neural-Networks"],
     "demo": "/nn-bird"
-  },
-  {
-    "id": 8,
-    "name": "Old Portfolio Website",
-    "image": "https://imgur.com/zkkBQqi.png",
-    "description": "My previous portfolio website using three.js for 3D graphics and animations.",
-    "tags": ["threejs"],
-    "demo": "/old",
-    "web_code": "https://github.com/JoshTheMenace/my_website"
   }
 ]
