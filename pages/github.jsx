@@ -75,9 +75,40 @@ export async function getStaticProps() {
   
   let repos = await repoRes.json();
 
-  repos = repos
-    .sort((a, b) => b.stargazers_count - a.stargazers_count)
-    .slice(0, 6);
+  // Featured repos to prioritize (from the projects tab)
+  const featuredRepoNames = [
+    'jarvis',
+    'Learnable',
+    'phoneagent',
+    'utah-road-conditions',
+    'wholi',
+    'neural-network-bird',
+  ];
+
+  // Separate featured repos and others
+  const featuredRepos = [];
+  const otherRepos = [];
+
+  repos.forEach((repo) => {
+    const lowerName = repo.name.toLowerCase();
+    const featuredIndex = featuredRepoNames.findIndex(
+      (name) => name.toLowerCase() === lowerName
+    );
+    if (featuredIndex !== -1) {
+      featuredRepos.push({ ...repo, featuredIndex });
+    } else {
+      otherRepos.push(repo);
+    }
+  });
+
+  // Sort featured repos by their order in the featuredRepoNames array
+  featuredRepos.sort((a, b) => a.featuredIndex - b.featuredIndex);
+
+  // Sort other repos by stars
+  otherRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+  // Take featured repos first, then fill remaining slots with top starred repos
+  repos = [...featuredRepos, ...otherRepos].slice(0, 6);
 
   return {
     props: { title: 'GitHub', repos, user },
