@@ -5,9 +5,9 @@ import styles from '../styles/ThemeInfo.module.css';
 const ThemeInfo = ({ icon, name, publisher, theme }) => {
   const { setTheme, isTransitioning } = useTheme();
 
-  const handleThemeChange = (e) => {
+  const handleThemeChange = () => {
     if (isTransitioning) return;
-    setTheme(theme, e);
+    setTheme(theme);
   };
 
   return (
