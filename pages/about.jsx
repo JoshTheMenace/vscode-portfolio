@@ -1,150 +1,170 @@
-import { useState } from 'react';
-// import ContactCode from '../components/ContactCode';
-// import styles from '../styles/ContactPage.module.css';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import styles from '../styles/AboutPage.module.css';
 
-
-const contactItems = [
-  {
-    social: 'website',
-    link: 'thearcher.dev',
-    href: 'https://thearcher.dev',
-  },
-  {
-    social: 'email',
-    link: 'josh.gimenes1@gmail.com',
-    href: 'mailto:josh.gimenes1@gmail.com',
-  },
-  {
-    social: 'github',
-    link: 'JoshTheMenace',
-    href: 'https://github.com/JoshTheMenace',
-  },
-  {
-    social: 'linkedin',
-    link: 'Josh Gimenes',
-    href: 'https://www.linkedin.com/in/josh-gimenes/',
-  },
+const codeLines = [
+  { text: '<main>', indent: 0 },
+  { text: '<section>', indent: 1 },
+  { text: '<h2>Who I Am</h2>', indent: 2 },
+  { text: '<p>', indent: 2 },
+  { text: "Hi, I'm Josh Gimenes, a passionate computer science student in northern Utah.", indent: 3, isContent: true },
+  { text: '</p>', indent: 2 },
+  { text: '<p>', indent: 2 },
+  { text: "I'm passionate about web and mobile development and enjoy solving challenging problems by coming up with creative and efficient coding solutions.", indent: 3, isContent: true },
+  { text: '</p>', indent: 2 },
+  { text: '</section>', indent: 1 },
+  { text: '', indent: 0 },
+  { text: '<section>', indent: 1 },
+  { text: '<h2>Work Experience</h2>', indent: 2 },
+  { text: '<p>', indent: 2 },
+  { text: "I'm currently a contractor at Stryker, where I specialize in the voice command and NLP module for a team-developed surgical application, enabling hands-free medical equipment control and enhancing surgeon efficiency in the OR.", indent: 3, isContent: true },
+  { text: '</p>', indent: 2 },
+  { text: '<p>', indent: 2 },
+  { text: 'I have worked for several other companies, building systems such as multiplayer games, mobile applications, and backend systems.', indent: 3, isContent: true },
+  { text: '</p>', indent: 2 },
+  { text: '</section>', indent: 1 },
+  { text: '', indent: 0 },
+  { text: '<section>', indent: 1 },
+  { text: '<h2>Achievements</h2>', indent: 2 },
+  { text: '<p>3.96 GPA | B.S. Computer Science - Utah Valley University</p>', indent: 2 },
+  { text: '<p>Mobile Dev Certification - MTECH</p>', indent: 2 },
+  { text: '<p>JustBuild AI Agents Hackathon - 2nd Place</p>', indent: 2 },
+  { text: '<p>Weber State Hackathon - 2nd Place</p>', indent: 2 },
+  { text: "<p>Chosen as Time magazine's Person of the Year 2006</p>", indent: 2 },
+  { text: '</section>', indent: 1 },
+  { text: '</main>', indent: 0 },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const lineVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+const renderCodeLine = (line, index) => {
+  const indent = '\u00A0'.repeat(line.indent * 4);
+
+  if (line.text === '') {
+    return <p key={index} className={styles.line}>&nbsp;</p>;
+  }
+
+  if (line.isContent) {
+    return (
+      <motion.p key={index} className={styles.line} variants={lineVariants}>
+        {indent}{line.text}
+      </motion.p>
+    );
+  }
+
+  // Parse HTML-like tags
+  const parts = line.text.split(/(<\/?[^>]+>)/g);
+  return (
+    <motion.p key={index} className={styles.line} variants={lineVariants}>
+      {indent}
+      {parts.map((part, i) => {
+        if (part.startsWith('</')) {
+          const tagName = part.slice(2, -1);
+          return (
+            <span key={i}>
+              &lt;/<span className={styles.className}>{tagName}</span>&gt;
+            </span>
+          );
+        } else if (part.startsWith('<')) {
+          const tagName = part.slice(1, -1);
+          return (
+            <span key={i}>
+              &lt;<span className={styles.className}>{tagName}</span>&gt;
+            </span>
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </motion.p>
+  );
+};
 
 const AboutPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
+  const [cursorVisible, setCursorVisible] = useState(true);
 
-  const submitForm = async (e) => {
-    e.preventDefault();
-    console.log(process.env.NEXT_PUBLIC_API_URL);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
-      method: 'POST',
-      body: JSON.stringify({ name, email, subject, message }),
-    });
-    if (res.ok) {
-      alert('Your response has been received!');
-      setName('');
-      setEmail('');
-      setSubject('');
-      setMessage('');
-    } else {
-      alert('There was an error. Please try again in a while.');
-    }
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCursorVisible((v) => !v);
+    }, 530);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className={styles.container}>
-      <div>
-        {/* <h3 className={styles.heading}>Reach Out Via Socials</h3> */}
+      <motion.div
+        className={styles.code}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {codeLines.map((line, index) => renderCodeLine(line, index))}
+        <motion.span
+          className={styles.cursor}
+          animate={{ opacity: cursorVisible ? 1 : 0 }}
+          transition={{ duration: 0.1 }}
+        >
+          |
+        </motion.span>
+      </motion.div>
 
-
-
-
-        <div className={styles.code}>
-
-
-
-        <p className={styles.line }>&lt;<span className={styles.className}>main</span>&gt;</p>
-          <p className={styles.line}>&nbsp;&nbsp;&lt;<span className={styles.className}>section</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>h2</span>&gt;Who I Am&lt;/<span className={styles.className}>h2</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hi, I'm Josh Gimenes, a passionate computer science student in northern Utah.
-              </p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I'm passionate about web and mobile development and enjoy solving challenging problems by coming up with creative and efficient coding solutions.
-              </p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-          <p className={styles.line}>&nbsp;&nbsp;&lt;/<span className={styles.className}>section</span>&gt;</p>
-
-          <p className={styles.line}></p>
-
-          <p className={styles.line}>&nbsp;&nbsp;&lt;<span className={styles.className}>section</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>h2</span>&gt;Work Experience&lt;/<span className={styles.className}>h2</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I'm currently a contractor at Stryker, where I specialize in the voice command and NLP module for a team-developed surgical application, enabling hands-free medical equipment control and enhancing surgeon efficiency in the OR.
-              </p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have worked for several other companies, building systems such as multiplayer games, mobile applications, and backend systems.
-              </p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-          <p className={styles.line}>&nbsp;&nbsp;&lt;/<span className={styles.className}>section</span>&gt;</p>
-          
-          <p className={styles.line}></p>
-
-          <p className={styles.line}>&nbsp;&nbsp;&lt;<span className={styles.className}>section</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>h2</span>&gt;Achievements&lt;/<span className={styles.className}>h2</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.96 GPA | B.S. Computer Science - Utah Valley University</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mobile Dev Certification - MTECH</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JustBuild AI Agents Hackathon - 2nd Place</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Weber State Hackathon - 2nd Place</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className={styles.className}>p</span>&gt;</p>
-              <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chosen as Time magazine's Person of the Year 2006</p>
-            <p className={styles.line}>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className={styles.className}>p</span>&gt;</p>
-          <p className={styles.line}>&nbsp;&nbsp;&lt;/<span className={styles.className}>section</span>&gt;</p>
-        
-        <p className={styles.line}>&lt;/<span className={styles.className}>main</span>&gt;</p>
-
-
-
-
-      </div>
-
-
-
-
-      </div>
-      <div className={styles.bgwhite}>
-        
-
+      <motion.div
+        className={styles.bgwhite}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
         <main className={styles.wrapper}>
-          <section>
+          <motion.section variants={sectionVariants} initial="hidden" animate="visible">
             <h2>Who I Am</h2>
             <p>
               Hi, I'm Josh Gimenes, a passionate computer science student in northern Utah.
             </p>
-
             <p>
-            I'm passionate about web and mobile development and enjoy solving challenging problems by coming up with creative and efficient coding solutions.
+              I'm passionate about web and mobile development and enjoy solving challenging problems by coming up with creative and efficient coding solutions.
             </p>
-          </section>
+          </motion.section>
 
-          <br></br>
+          <br />
 
-          <section>
+          <motion.section
+            variants={sectionVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.2 }}
+          >
             <h2>Work</h2>
             <p>
               I'm currently a contractor at Stryker, where I specialize in the voice command and NLP module for a team-developed surgical application, enabling hands-free medical equipment control and enhancing surgeon efficiency in the OR.
@@ -152,31 +172,25 @@ const AboutPage = () => {
             <p>
               I have worked for several other companies, building systems such as multiplayer games, mobile applications, and backend systems.
             </p>
-          </section>
+          </motion.section>
 
-          <br></br>
+          <br />
 
-          <section>
+          <motion.section
+            variants={sectionVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.4 }}
+          >
             <h2>Achievements</h2>
-            <p>
-              3.96 GPA | B.S. Computer Science - Utah Valley University
-            </p>
-            <p>
-              Mobile Dev Certification - MTECH
-            </p>
-            <p>
-              JustBuild AI Agents Hackathon - 2nd Place
-            </p>
-            <p>
-              Weber State Hackathon - 2nd Place
-            </p>
-            <p>
-              Chosen as Time magazine's Person of the Year 2006
-            </p>
-          </section>
+            <p>3.96 GPA | B.S. Computer Science - Utah Valley University</p>
+            <p>Mobile Dev Certification - MTECH</p>
+            <p>JustBuild AI Agents Hackathon - 2nd Place</p>
+            <p>Weber State Hackathon - 2nd Place</p>
+            <p>Chosen as Time magazine's Person of the Year 2006</p>
+          </motion.section>
         </main>
-
-      </div>
+      </motion.div>
     </div>
   );
 };

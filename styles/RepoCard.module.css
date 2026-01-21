@@ -3,21 +3,76 @@
   flex-direction: column;
   justify-content: space-between;
   background: var(--article-bg);
-  border-radius: 5px;
+  border-radius: 8px;
   padding: 1rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.4s ease;
+  will-change: transform, box-shadow;
+}
+
+/* Animated gradient border on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    var(--accent-color),
+    transparent,
+    var(--accent-color),
+    transparent
+  );
+  background-size: 400% 400%;
+  border-radius: 10px;
+  z-index: -1;
+  opacity: 0;
+  animation: gradient-rotate 3s ease infinite paused;
+  transition: opacity 0.4s ease;
+}
+
+@keyframes gradient-rotate {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .card:hover {
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.25),
+    0 0 25px rgba(var(--accent-color-rgb, 240, 67, 120), 0.1);
+  border-color: var(--accent-color);
+}
+
+.card:hover::before {
+  opacity: 0.3;
+  animation-play-state: running;
 }
 
 .card p {
   margin-bottom: 1.25rem;
+  transition: color 0.3s ease;
 }
 
 .title {
   color: var(--accent-color);
   margin-bottom: 1rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card:hover .title {
+  text-shadow: 0 0 20px var(--accent-color);
 }
 
 .stats {
@@ -29,6 +84,11 @@
   display: flex;
   align-items: center;
   margin-right: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.stats div:hover {
+  transform: scale(1.1);
 }
 
 .stats > div:nth-child(2) {
@@ -38,11 +98,19 @@
 .icon {
   color: var(--accent-color);
   margin-right: 0.3rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover .icon {
+  filter: drop-shadow(0 0 6px var(--accent-color));
 }
 
 @media screen and (max-width: 600px) {
   .card {
     padding: 0.8rem;
+  }
+  .card:hover {
+    transform: translateY(-3px) scale(1.01);
   }
   .card p {
     margin-bottom: 1rem;

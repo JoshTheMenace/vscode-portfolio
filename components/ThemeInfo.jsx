@@ -1,10 +1,13 @@
 import Image from 'next/image';
+import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/ThemeInfo.module.css';
 
 const ThemeInfo = ({ icon, name, publisher, theme }) => {
-  const setTheme = (theme) => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+  const { setTheme, isTransitioning } = useTheme();
+
+  const handleThemeChange = (e) => {
+    if (isTransitioning) return;
+    setTheme(theme, e);
   };
 
   return (
@@ -15,7 +18,13 @@ const ThemeInfo = ({ icon, name, publisher, theme }) => {
           <h3>{name}</h3>
           <h5>{publisher}</h5>
         </div>
-        <button onClick={() => setTheme(theme)}>Set Color Theme</button>
+        <button
+          onClick={handleThemeChange}
+          disabled={isTransitioning}
+          className={`${styles.themeButton} theme-button-glow`}
+        >
+          {isTransitioning ? 'Applying...' : 'Set Color Theme'}
+        </button>
       </div>
     </div>
   );

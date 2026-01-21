@@ -14,16 +14,43 @@
   justify-content: space-between;
 }
 
-.info button {
+.info button,
+.themeButton {
   margin-top: 0.75rem;
   border: none;
   background: var(--button-bg);
   color: var(--button-text);
-  padding: 0.15rem 0.5rem;
+  padding: 0.5rem 1rem;
   font-weight: 600;
   cursor: pointer;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.info button:focus {
-  outline: 1px solid var(--accent-color);
+.info button:hover,
+.themeButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 20px var(--accent-color);
+}
+
+.info button:active,
+.themeButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.info button:focus,
+.themeButton:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.info button:disabled,
+.themeButton:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }
