@@ -106,3 +106,15 @@
   margin-bottom: 0.5rem;
 }
 
+.cursor {
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.2rem;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

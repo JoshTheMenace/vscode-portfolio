@@ -1,7 +1,36 @@
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import GitHubCalendar from 'react-github-calendar';
 import RepoCard from '../components/RepoCard';
 import styles from '../styles/GithubPage.module.css';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 25,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
 
 const GithubPage = ({ repos, user }) => {
   const theme = {
@@ -14,7 +43,12 @@ const GithubPage = ({ repos, user }) => {
 
   return (
     <>
-      <div className={styles.user}>
+      <motion.div
+        className={styles.user}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
         <div>
           <Image
             src={user.avatar_url}
@@ -34,20 +68,32 @@ const GithubPage = ({ repos, user }) => {
         <div>
           <h3>{user.followers} followers</h3>
         </div>
-      </div>
-      <div className={styles.container}>
+      </motion.div>
+      <motion.div
+        className={styles.container}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {repos.map((repo) => (
-          <RepoCard key={repo.id} repo={repo} />
+          <motion.div key={repo.id} variants={itemVariants}>
+            <RepoCard repo={repo} />
+          </motion.div>
         ))}
-      </div>
-      <div className={styles.contributions}>
+      </motion.div>
+      <motion.div
+        className={styles.contributions}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
         <GitHubCalendar
           username={process.env.NEXT_PUBLIC_GITHUB_USERNAME}
           theme={theme}
           hideColorLegend
           hideMonthLabels
         />
-      </div>
+      </motion.div>
     </>
   );
 };
@@ -72,7 +118,7 @@ export async function getStaticProps() {
       },
     }
   );
-  
+
   let repos = await repoRes.json();
 
   // Featured repos to prioritize (from the projects tab)
