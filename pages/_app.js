@@ -8,47 +8,23 @@ import '../styles/globals.css';
 import '../styles/themes.css';
 import '../styles/transitions.css';
 
-// Premium page transition variants
+// Simple fade transition - no layout-breaking transforms on exit
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 20,
-    scale: 0.98,
   },
   enter: {
     opacity: 1,
-    y: 0,
-    scale: 1,
     transition: {
-      duration: 0.4,
-      ease: [0.25, 0.46, 0.45, 0.94],
-      when: 'beforeChildren',
-      staggerChildren: 0.1,
+      duration: 0.3,
+      ease: 'easeOut',
     },
   },
   exit: {
     opacity: 0,
-    y: -10,
-    scale: 1.01,
     transition: {
-      duration: 0.25,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-};
-
-// Content animation for staggered children
-const contentVariants = {
-  initial: {
-    opacity: 0,
-    y: 15,
-  },
-  enter: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.35,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      duration: 0.15,
+      ease: 'easeIn',
     },
   },
 };
@@ -79,9 +55,7 @@ function MyApp({ Component, pageProps }) {
             exit="exit"
             className="page-transition-wrapper"
           >
-            <motion.div variants={contentVariants}>
-              <Component {...pageProps} />
-            </motion.div>
+            <Component {...pageProps} />
           </motion.div>
         </AnimatePresence>
       </Layout>
