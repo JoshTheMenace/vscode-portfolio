@@ -2,9 +2,9 @@
   {
     "id": 1,
     "name": "Vibing",
-    "image": "https://i.imgur.com/6EqThkP.png",
+    "image": "https://i.imgur.com/ohtxgVf.png",
     "description": "Vibe coding platform for on-the-go development. Features multiple AI agents with specific roles including PM, coding agents, and testing agents that write tests and review screenshots.",
-    "tags": ["ai", "agents", "next", "typescript"],
+    "tags": ["ai", "claude-ai", "next", "typescript"],
     "demo": "https://vibe.joshthemenace.com"
   },
   {
